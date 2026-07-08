@@ -77,8 +77,27 @@ preflight -> choose route -> execute -> verify -> record outcome
 
 ```bash
 python3 -m codex_second_brain.cli route-suggest \
-  demo-vault \
-  "debugging noisy search source trace"
+demo-vault \
+"debugging noisy search source trace"
+```
+
+Update the graph after verified outcomes:
+
+```bash
+python3 -m codex_second_brain.cli record-outcome demo-vault \
+  --edge-id edge_tool_overload_use_capability_router \
+  --outcome success \
+  --evidence tests/evidence/route-pass.md
+
+python3 -m codex_second_brain.cli self-correct demo-vault \
+  --failed-edge-id edge_momo_route_result_to_memory_graph \
+  --corrected-edge-id edge_momo_route_result_to_capture_event_first \
+  --from "momo route result without verification" \
+  --to "capture event -> verified outcome -> memory edge update" \
+  --action "Capture momo route results before strengthening route memory."
+
+python3 -m codex_second_brain.cli decay demo-vault --days-unused 30 --amount 0.1
+python3 -m codex_second_brain.cli explain-edge demo-vault edge_debugging_graph_first_after_noisy_search
 ```
 
 ## Boundary

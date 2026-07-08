@@ -53,10 +53,10 @@ The Markdown `index.md` remains human-friendly. A JSON index can be generated la
 
 ## Validation Strategy
 
-The reference CLI currently performs lightweight validation without external dependencies:
+The reference CLI validates startup files, root JSONL files, and demo fixtures:
 
 ```bash
 python3 -m codex_second_brain.cli validate demo-vault
 ```
 
-Full JSON Schema validation can be added in downstream projects using `jsonschema`, IDE schema registration, or a pre-commit hook.
+When `jsonschema` is installed, validation uses the Draft 2020-12 schemas in `schemas/`. Without that package, the CLI falls back to a strict built-in validator for the public reference shapes. This keeps local development fast while still making CI and installed environments schema-aware.

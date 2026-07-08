@@ -72,6 +72,30 @@ python3 -m codex_second_brain.cli capture \
 
 Add `--write` only when you intentionally want to append to `captures.jsonl`.
 
+## Adaptive Memory Operations
+
+The reference CLI includes executable memory-graph operations:
+
+```bash
+python3 -m codex_second_brain.cli record-outcome demo-vault \
+  --edge-id edge_tool_overload_use_capability_router \
+  --outcome success \
+  --evidence tests/evidence/route-pass.md
+
+python3 -m codex_second_brain.cli self-correct demo-vault \
+  --failed-edge-id edge_momo_route_result_to_memory_graph \
+  --corrected-edge-id edge_momo_route_result_to_capture_event_first \
+  --from "momo route result without verification" \
+  --to "capture event -> verified outcome -> memory edge update" \
+  --action "Capture momo route results before strengthening route memory."
+
+python3 -m codex_second_brain.cli decay demo-vault --days-unused 30 --amount 0.1
+python3 -m codex_second_brain.cli explain-edge demo-vault edge_debugging_graph_first_after_noisy_search
+python3 -m codex_second_brain.cli ingest-momo-route demo-vault demo-vault/fixtures/momo-route-result.json
+```
+
+These commands stay dry-run-first unless `--write` is set. Successful outcomes reinforce useful paths, failed outcomes weaken or suppress bad paths, decay prevents stale memory from dominating, and `explain-edge` makes a route recommendation inspectable.
+
 ## Runtime Loop
 
 ```text
@@ -143,7 +167,7 @@ See [docs/schemas.md](docs/schemas.md).
 
 ## Minimal CLI
 
-The reference CLI is deliberately small and dependency-free.
+The reference CLI is deliberately small and keeps schema validation explicit.
 
 | Command | Purpose |
 |---|---|
@@ -152,6 +176,11 @@ The reference CLI is deliberately small and dependency-free.
 | `second-brain capture ...` | Create a capture event; dry-run unless `--write` is set. |
 | `second-brain consolidate <vault> --dry-run` | Report startup gaps, orphan candidates, and low-confidence edges. |
 | `second-brain route-suggest <vault> <query>` | Suggest routes from memory graph edges. |
+| `second-brain record-outcome <vault> ...` | Reinforce successful routes or weaken failed routes. |
+| `second-brain self-correct <vault> ...` | Suppress a failed route and reinforce the corrected one. |
+| `second-brain decay <vault>` | Lower old unused edge weights so stale memory stops dominating. |
+| `second-brain explain-edge <vault> <edge-id>` | Explain why a route memory edge would be selected. |
+| `second-brain ingest-momo-route <vault> <json>` | Convert a momo-tools route result into a capture event and memory edge update. |
 
 After installation, the console script is available as `second-brain`. During development, use:
 

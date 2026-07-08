@@ -1,47 +1,50 @@
 # Roadmap
 
-This roadmap keeps the project honest about what is implemented now and what remains design-level.
+This roadmap keeps the project honest about what is implemented now versus what remains design-level.
 
 ## v0.2 - Public Reference Package
 
-Status: in progress.
+Status: implemented in the local reference package.
 
 - Add MIT license and security policy.
 - Add machine-readable schemas.
 - Add minimal CLI:
-  - `init`
-  - `validate`
-  - `capture`
-  - `consolidate --dry-run`
-  - `route-suggest`
-- Treat `demo-vault/` as a golden fixture.
+- `init`
+- `validate`
+- `capture`
+- `consolidate --dry-run`
+- `route-suggest`
+- Treat `demo-vault/` as the golden fixture.
 - Add tests and GitHub Actions CI.
 - Add synthetic `momo-tools` integration fixture.
 
 ## v0.3 - Real Consolidation Runner
 
 Goal: make consolidation useful while staying dry-run-first.
+Status: partially implemented locally.
 
-- Generate a machine-readable consolidation report.
+- Generate machine-readable consolidation report with `proposed_changes[]`.
 - Detect duplicate candidates.
-- Detect stale memory graph edges.
+- Detect stale or low-confidence memory graph edges.
 - Suggest index updates.
 - Suggest capture promotion into memory graph edges.
 - Keep all risky actions approval-gated.
 
 ## v0.4 - Memory Graph Operations
 
-Goal: make route memory updateable by tools.
+Goal: make route memory updateable with tools.
+Status: implemented locally.
 
 - Add `record-outcome`.
 - Add `decay`.
 - Add `self-correct`.
 - Add edge explainability.
-- Add JSON Schema validation in CI.
+- Add schema-backed validation with built-in fallback.
 
 ## v0.5 - Router Feedback Loop
 
 Goal: close the loop with external capability routers.
+Status: first local loop implemented.
 
 - Ingest `momo-tools` route results.
 - Convert verified outcomes into capture events.

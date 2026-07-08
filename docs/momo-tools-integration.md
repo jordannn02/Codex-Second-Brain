@@ -41,6 +41,22 @@ python3 -m codex_second_brain.cli route-suggest \
   "publish a safe documentation change to GitHub"
 ```
 
+Ingest a route result as a dry-run proposal:
+
+```bash
+python3 -m codex_second_brain.cli ingest-momo-route \
+  demo-vault \
+  demo-vault/fixtures/momo-route-result.json
+```
+
+Add `--write` to append a capture event to `captures.jsonl` and update `memory-graph.jsonl`.
+
+The ingestion loop is:
+
+```text
+momo route result -> capture event -> record outcome -> memory edge update -> future route suggestion
+```
+
 The second brain does not replace the router. It gives the router historical context about what worked, what failed, and what proof was required.
 
 ## Safety Boundary
