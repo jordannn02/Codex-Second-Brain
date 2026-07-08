@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jordannn02/Codex-Second-Brain/schemas/memory-edge.schema.json",
+  "title": "Codex Second Brain Memory Edge",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "from",
+    "to",
+    "relation",
+    "weight",
+    "confidence",
+    "decay_state",
+    "success_count",
+    "fail_count",
+    "evidence",
+    "action"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_\\-]{2,120}$"
+    },
+    "from": {
+      "type": "string",
+      "minLength": 3
+    },
+    "to": {
+      "type": "string",
+      "minLength": 3
+    },
+    "relation": {
+      "type": "string",
+      "enum": [
+        "preferred_tool_for",
+        "workflow_shortcut",
+        "evidence_chain",
+        "verified_by",
+        "avoid_if",
+        "suppress",
+        "supersedes"
+      ]
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "unverified",
+        "inferred",
+        "verified-by-use",
+        "verified-by-test",
+        "stale",
+        "suppressed"
+      ]
+    },
+    "decay_state": {
+      "type": "string",
+      "enum": [
+        "hot",
+        "warm",
+        "cold",
+        "stale",
+        "suppress"
+      ]
+    },
+    "success_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fail_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "last_used": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "action": {
+      "type": "string",
+      "minLength": 3
+    },
+    "failure_signature": {
+      "type": "string"
+    },
+    "interruption_policy": {
+      "type": "string"
+    }
+  }
+}

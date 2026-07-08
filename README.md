@@ -1,52 +1,42 @@
-# Codex Second Brain OS: Adaptive Route Memory for AI Agents
+# Codex Second Brain OS
 
-Failure-path weakening, self-correction, success-route reinforcement, evidence layers, verifiable conclusions, route memory, capability routing, adaptive tool selection, auto-triggered capture routing, and weekly consolidation for Codex-powered work.
+Adaptive route memory for AI agents.
 
-This is not a note-taking template. Codex Second Brain OS is an agent operating layer that turns Markdown, Obsidian, command files, local evidence, and workflow history into an adaptive routing system. It starts from three claims: long-term memory evolution matters, old conclusions can be updated, and contradictions can be detected before they silently mislead future work.
+Codex Second Brain OS is a public-safe reference package for agent memory workflows. It turns Markdown, Obsidian-style vaults, command files, local evidence, and workflow history into a small operating layer for AI agents.
 
-The design language comes from human memory: association, retrieval, reinforcement, inhibition, consolidation, forgetting, and reconsolidation translated into practical AI-agent workflows.
+It is not a note-taking template. It helps an agent decide what to read, which capability to use, what proof is required, and which failed route should be weakened next time.
 
-## Core Features: Route Memory, Evidence Layers, Capability Routing, Auto-Triggers
+The design language comes from human memory: association, retrieval, reinforcement, inhibition, consolidation, forgetting, and reconsolidation.
+
+## What Makes It Different
 
 Most "AI + notes" systems store information. Codex Second Brain OS changes agent behavior.
 
-### 1. Failure-Path Weakening, Self-Correction, and Success-Route Reinforcement
+| Capability | What it means |
+|---|---|
+| Failure-path weakening | Routes that repeatedly fail become less attractive or explicitly suppressed. |
+| Self-correction | A failed path can be replaced by a corrected route with evidence. |
+| Success-route reinforcement | Verified successful workflows become easier to reuse. |
+| Evidence layers | Memory, documents, source code, query results, runtime checks, and manual approval stay separate. |
+| Adaptive tool selection | The agent routes tasks to the narrowest useful capability instead of using one generic workflow. |
+| Long-term memory evolution | Old conclusions can be updated when new evidence appears. |
+| Contradiction handling | Conflicting notes become review targets instead of silent confusion. |
+| Dry-run-first automation | Maintenance reports before it writes, deletes, archives, or merges. |
 
-When a workflow succeeds and is verified, that route can become stronger. When a route fails, the system records the error signature and weakens or suppresses that path. The corrected route becomes easier for future agents to retrieve.
+## Current Status
 
-### 2. Evidence Layers, Verifiable Conclusions, and Route Memory
+This repository is an alpha reference implementation. It includes:
 
-The system separates memory from proof. Notes can guide investigation, but source code, SQL results, runtime checks, documents, screenshots, and manual verification remain distinct evidence layers. A conclusion becomes stronger only when its proof path is clear.
+- a system specification;
+- a synthetic demo vault;
+- machine-readable schemas;
+- a minimal CLI;
+- dry-run consolidation reports;
+- tests over the demo vault;
+- a `momo-tools` integration fixture;
+- public safety and licensing files.
 
-### 3. Capability Routing and Adaptive Tool Selection
-
-The agent does not use one generic workflow for every request. It first classifies the task, then chooses the narrowest useful capability: document conversion, code search, SQL, browser automation, GitHub workflow, dashboard generation, vault search, or memory-graph lookup.
-
-### 4. Auto-Triggered Capture Routing and Weekly Consolidation
-
-Capture, logging, health checks, route review, and weekly consolidation can be triggered by explicit commands, scheduled automation, post-delivery hooks, or repeated failure patterns. The vault improves without requiring the user to manually organize every note.
-
-### 5. Adaptive Learning Loop
-
-Every meaningful attempt can update the memory graph:
-
-```text
-task -> route -> execution -> verification -> reinforcement or correction
-```
-
-The system learns successful paths, failed paths, stale paths, corrected paths, and contradictions.
-
-### 6. Long-Term Knowledge Evolution and Old-Conclusion Updates
-
-Old conclusions can be updated when new evidence appears. The previous belief is preserved as history, while the current conclusion points to the newest verified source.
-
-### 7. Contradiction Handling
-
-Contradictions are not hidden. The system can surface conflicts between old notes and new evidence, preserve what was believed before, and mark which conclusion is currently trusted.
-
-### 8. Delivery-First Memory
-
-The user-visible result comes first. Capture, save, graph updates, and cleanup happen only after the answer, file, query result, report, or artifact has been delivered.
+The goal is not to ship a huge memory platform in one step. The goal is to make the method inspectable, forkable, and testable.
 
 ## Visual Overview
 
@@ -54,121 +44,167 @@ The user-visible result comes first. Capture, save, graph updates, and cleanup h
 
 ![Redacted demo vault example](assets/homepage-demo-vault.svg)
 
-## Core Idea
+## Quick Start
 
-An agent should not rediscover the same workflow every day.
+Run the reference CLI from the repository root:
 
-When a task succeeds, the system records the route:
-
-```text
-task context -> chosen capability -> evidence used -> result -> verification -> reusable edge
+```bash
+python3 -m codex_second_brain.cli validate demo-vault
+python3 -m codex_second_brain.cli consolidate demo-vault --dry-run
+python3 -m codex_second_brain.cli route-suggest demo-vault "debugging noisy search source trace"
 ```
 
-When a task fails, the failure is also useful:
+Create a new minimal vault skeleton:
 
-```text
-task context -> failed path -> error signature -> suppression rule -> corrected route
+```bash
+python3 -m codex_second_brain.cli init ./my-vault
 ```
 
-When a conclusion becomes stale, the system keeps history and updates the current answer:
+Generate a capture event without writing it:
 
-```text
-old conclusion -> new evidence -> contradiction review -> revised conclusion
+```bash
+python3 -m codex_second_brain.cli capture \
+  --vault demo-vault \
+  --type route-worked \
+  --summary "Debugging route succeeded after graph-first tracing" \
+  --evidence "demo-vault/fixtures/memory-graph.jsonl"
 ```
 
-Over time, the vault becomes more than storage. It becomes an inspectable memory graph that tells future agents:
-
-- what to read first;
-- which tool to prefer;
-- what proof is required;
-- which path to avoid;
-- what should be automated;
-- which conclusion changed;
-- what must stay private.
+Add `--write` only when you intentionally want to append to `captures.jsonl`.
 
 ## Runtime Loop
 
-1. **Load startup context**
-   Read `_CLAUDE.md`, `index.md`, `Home.md`, and `CRITICAL_FACTS.md` so the agent understands local rules before acting.
+```text
+load startup context
+  -> run capability preflight
+  -> deliver user-visible result
+  -> verify evidence
+  -> capture durable signal
+  -> reinforce or weaken route memory
+  -> consolidate with dry-run reports
+```
 
-2. **Run capability preflight**
-   Classify the task and choose the narrowest useful route.
+The startup context is intentionally small:
 
-3. **Deliver first**
-   Produce the answer, file, query result, report, or artifact before saving memory.
+- `_CLAUDE.md` for local agent rules;
+- `index.md` for the vault map;
+- `Home.md` for the dashboard;
+- `CRITICAL_FACTS.md` for tiny always-load facts.
 
-4. **Separate evidence layers**
-   Keep memory, documentation, source code, SQL, runtime screens, and write authority as separate claims.
-
-5. **Capture durable signals**
-   Save decisions, exact commands, source paths, error strings, verified query shapes, tool choices, and reusable workflow lessons.
-
-6. **Reinforce and weaken graph edges**
-   Strengthen routes that worked. Decay unused routes. Suppress routes with repeated failure signatures. Record corrected paths.
-
-7. **Trigger maintenance automatically**
-   Scheduled command-driven consolidation refreshes indexes, surfaces stale rules, detects orphan notes, and proposes cleanup without deleting evidence.
-
-## Repository Scope
-
-This public repository contains only two publishable layers:
-
-| Folder | Contains | Does not contain |
-|---|---|---|
-| `system/` | Agent rules, capture routing, memory graph model, weekly consolidation workflow, and command catalog patterns. | Private notes, credentials, production systems, or real customer data. |
-| `demo-vault/` | A synthetic Markdown vault showing how tasks become delivered artifacts plus reusable memory. | Real people, company data, finance notes, internal meetings, or production IDs. |
-
-## Practical Examples
-
-### Repeated Debugging Route Learns From Failure
-
-An agent first tries broad text search and wastes time. The verified fix is to start from the code graph, trace callers and callees, then inspect the exact source snippet. The failed route is weakened, the corrected route is reinforced, and the next similar debugging task starts from a better path.
-
-### Tool Overload Auto-Router
-
-A user has many skills, plugins, connectors, and local tools. Instead of asking the user which tool to use, the agent classifies the task and routes itself: document parser for files, GitHub workflow for repository work, browser automation for live UI, SQL for data questions, and memory graph lookup for repeated workflow patterns.
-
-### Meeting-to-Execution Memory
-
-A meeting produces decisions, owners, risks, and follow-up tasks. The agent delivers the meeting summary first, then captures only durable signals. Weekly consolidation promotes repeated themes into reusable rules and flags contradictions between earlier decisions and what the team now believes.
+The agent should not read the entire vault before every task.
 
 ## Repository Layout
 
 ```text
 .
 ├── README.md
-├── assets/
-│   ├── homepage-system-flow.svg
-│   └── homepage-demo-vault.svg
+├── LICENSE
+├── SECURITY.md
+├── CONTRIBUTING.md
+├── ROADMAP.md
+├── pyproject.toml
+├── codex_second_brain/
+│   └── cli.py
+├── schemas/
+│   ├── memory-edge.schema.json
+│   ├── capture-event.schema.json
+│   └── vault-index.schema.json
+├── docs/
+│   ├── architecture.md
+│   ├── dry-run-automation.md
+│   ├── momo-tools-integration.md
+│   └── schemas.md
 ├── system/
-│   ├── README.md
 │   ├── AGENTS.example.md
 │   ├── capture-routing.md
 │   ├── memory-graph.md
 │   ├── weekly-consolidation.md
 │   └── .codex/commands/README.md
-└── demo-vault/
-    ├── README.md
-    ├── _CLAUDE.md
-    ├── index.md
-    ├── Home.md
-    ├── CRITICAL_FACTS.md
-    ├── Knowledge/Examples/
-    ├── Dev Logs/
-    └── Logs/
+├── demo-vault/
+│   ├── _CLAUDE.md
+│   ├── index.md
+│   ├── Home.md
+│   ├── CRITICAL_FACTS.md
+│   ├── Knowledge/Examples/
+│   └── fixtures/
+└── tests/
+    └── test_cli.py
 ```
 
-## How to Adopt
+## Schemas
 
-1. Copy `system/AGENTS.example.md` into your agent instructions and trim it for your environment.
-2. Create a small vault with `_CLAUDE.md`, `index.md`, `Home.md`, and `CRITICAL_FACTS.md`.
-3. Use capture routing only after the user-visible result is complete.
-4. Start recording workflow successes and failures as memory-graph edges.
-5. Add scheduled consolidation only after captures begin to accumulate.
-6. Keep real private data in a private vault or private repository.
+The `schemas/` folder defines machine-readable formats for:
+
+- `memory-edge.schema.json`: route memory edges with weight, confidence, decay state, evidence, and action;
+- `capture-event.schema.json`: post-delivery durable memory candidates;
+- `vault-index.schema.json`: a compact machine-readable vault navigation map.
+
+See [docs/schemas.md](docs/schemas.md).
+
+## Minimal CLI
+
+The reference CLI is deliberately small and dependency-free.
+
+| Command | Purpose |
+|---|---|
+| `second-brain init <vault>` | Create `_CLAUDE.md`, `index.md`, `Home.md`, `CRITICAL_FACTS.md`, `memory-graph.jsonl`, and `captures.jsonl`. |
+| `second-brain validate <vault>` | Validate startup files plus JSONL fixtures. |
+| `second-brain capture ...` | Create a capture event; dry-run unless `--write` is set. |
+| `second-brain consolidate <vault> --dry-run` | Report startup gaps, orphan candidates, and low-confidence edges. |
+| `second-brain route-suggest <vault> <query>` | Suggest routes from memory graph edges. |
+
+After installation, the console script is available as `second-brain`. During development, use:
+
+```bash
+python3 -m codex_second_brain.cli --help
+```
+
+## Demo Vault as Golden Fixture
+
+The demo vault is synthetic and public-safe. It includes:
+
+- repeated debugging route learning;
+- tool overload auto-routing;
+- meeting-to-execution memory;
+- capture events;
+- memory graph edges;
+- a synthetic `momo-tools` route result.
+
+The tests treat this demo vault as a golden fixture:
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+## momo-tools Integration
+
+`momo-tools` can act as the front-end capability router and risk gate. Codex Second Brain OS acts as the long-term route-learning layer.
+
+```text
+user task
+  -> momo-tools route / gate / verify
+  -> agent executes bounded task
+  -> deliver result
+  -> Codex Second Brain captures durable signal
+  -> memory graph strengthens or weakens route
+  -> future routing gets better context
+```
+
+See [docs/momo-tools-integration.md](docs/momo-tools-integration.md).
 
 ## Safety Rule
 
 Publish the operating system, not the private memory.
 
-The examples in this repository are synthetic, redacted, and intentionally generic. Never publish raw transcripts, credentials, financial records, private notes, internal customer data, or production identifiers.
+This public repository should contain methods, schemas, docs, and synthetic fixtures only. Do not publish raw transcripts, credentials, financial records, private notes, internal customer data, production identifiers, or private vault exports.
+
+See [SECURITY.md](SECURITY.md).
+
+## Roadmap and Contributions
+
+- See [ROADMAP.md](ROADMAP.md) for the implementation plan.
+- See [CONTRIBUTING.md](CONTRIBUTING.md) for public-safe contribution rules.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jordannn02/Codex-Second-Brain/schemas/capture-event.schema.json",
+  "title": "Codex Second Brain Capture Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "timestamp",
+    "type",
+    "summary",
+    "evidence"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_\\-]{2,160}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "route-worked",
+        "route-failed",
+        "decision",
+        "proof-chain",
+        "mapping",
+        "deliverable",
+        "contradiction"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 3
+    },
+    "route": {
+      "type": "string"
+    },
+    "outcome": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "privacy": {
+      "type": "string",
+      "enum": [
+        "public-safe",
+        "private",
+        "sensitive",
+        "unknown"
+      ],
+      "default": "unknown"
+    },
+    "dry_run_first": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

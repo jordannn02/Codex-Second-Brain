@@ -15,21 +15,23 @@ This public-safe demo index maps the synthetic vault. Use it to demonstrate how 
 
 ## System
 
-- [[Home]] - demo dashboard.
-- [[CRITICAL_FACTS]] - tiny always-load context.
-- [[_CLAUDE]] - demo operating manual.
+- [[Home]] - Demo dashboard.
+- [[CRITICAL_FACTS]] - Tiny always-load context.
+- [[_CLAUDE]] - Demo operating manual.
 
 ## Knowledge
 
-- [[Knowledge/Examples/2026-07-08 - Repeated Debugging Route Learning]] - failed route suppression and corrected route reinforcement.
-- [[Knowledge/Examples/2026-07-08 - Tool Overload Auto Router]] - capability-aware routing when many tools are available.
-- [[Knowledge/Examples/2026-07-08 - Meeting to Execution Memory]] - meeting decisions converted into durable execution memory.
+- [[Knowledge/Examples/2026-07-08 - Repeated Debugging Route Learning]] - Failed route suppression and corrected route reinforcement.
+- [[Knowledge/Examples/2026-07-08 - Tool Overload Auto Router]] - Capability routing when the user has too many tools.
+- [[Knowledge/Examples/2026-07-08 - Meeting to Execution Memory]] - Meeting decisions captured without raw transcript exposure.
 
-## Dev Logs
+## Fixtures
 
-- [[Dev Logs/2026-07-08 - Demo Adaptive Routing Cases]] - example delivery-first work log for the three demo cases.
+- `fixtures/memory-graph.jsonl` - Golden memory graph edges.
+- `fixtures/capture-events.jsonl` - Golden capture events.
+- `fixtures/momo-route-result.json` - Synthetic momo-tools route result.
 
-## Operation Logs
+## Logs
 
-- [[Logs/2026-07-08]] - append-only demo operation log.
-
+- [[Dev Logs/2026-07-08 - Demo Adaptive Routing Cases]] - Implementation log for demo scenarios.
+- [[Logs/2026-07-08]] - Operation log.

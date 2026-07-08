@@ -1,72 +1,93 @@
-# Agent Operating Defaults
+# Codex Second Brain OS - Agent Instructions
 
-Use this as a public-safe starting point for a Codex + Obsidian second brain.
+Use this as a public-safe starting point for an AI agent working with an Obsidian-style second brain.
 
 ## Startup Context
 
-For non-trivial tasks where vault context may matter, read these files first:
+Before non-trivial work, load the smallest useful context layer:
 
-1. `_CLAUDE.md` - vault-specific operating rules.
+1. `_CLAUDE.md` - local agent rules and safety boundaries.
 2. `index.md` - navigation map.
-3. `Home.md` - current dashboard.
-4. `CRITICAL_FACTS.md` - tiny always-load context.
+3. `Home.md` - dashboard and current project entry points.
+4. `CRITICAL_FACTS.md` - tiny always-load facts.
 
-Report startup context clearly when it matters:
+Do not read the entire vault before every task. Start narrow, then expand only when the task needs it.
 
-```text
-Startup context: loaded _CLAUDE/index/Home/CRITICAL_FACTS.
-```
+## Capability Preflight
 
-## Capability Router
-
-Before acting, classify the task:
+Classify the request before acting:
 
 - quick answer;
 - code or repo work;
-- document / spreadsheet / slide / PDF / image work;
-- database / source tracing / system investigation;
-- browser or app connector work;
-- data analysis / dashboard / report;
-- current or latest information;
-- automation or recurring workflow.
+- document conversion;
+- data or SQL analysis;
+- browser or app automation;
+- GitHub workflow;
+- vault search;
+- memory graph routing;
+- current external information;
+- destructive or permission-sensitive action.
 
-Then choose the narrowest useful capability. Do not call tools only because they exist.
+Choose the narrowest useful capability. If the task has a known memory graph route, prefer that route but still verify evidence.
 
 ## Delivery First
 
-For normal user work:
+The user-visible result comes first.
 
-1. Complete the visible user task first.
-2. Give the answer, file, query result, artifact, or handoff.
-3. Only after that, run capture, memory graph feedback, rule promotion, or consolidation.
+```text
+deliver answer / file / query result / report / artifact
+  -> then capture durable memory
+  -> then update graph edges
+  -> then leave broad cleanup to consolidation
+```
+
+Do not make the user wait for memory capture before receiving the actual result.
 
 ## Evidence Boundary
 
-Keep proof layers separate:
+Memory is not proof. Keep evidence layers separate:
 
-- memory or notes: context, not proof;
-- documentation: intended behavior;
-- source code: implemented behavior;
-- database/query: current data state;
-- runtime/manual test: observed behavior;
-- write authority: separate permission boundary.
+- note or meeting context;
+- documentation;
+- source code;
+- test result;
+- SQL or data result;
+- runtime screen;
+- manual approval;
+- external source.
 
-## Capture Rule
+State which layer supports the conclusion.
 
-Save only material that reduces future lookup or prevents repeated mistakes:
+## Capture Routing
 
+Save only durable signals:
+
+- routes that worked;
+- routes that failed;
 - decisions;
-- exact commands or query shapes;
-- field / setting / source-path mappings;
-- error strings and root causes;
-- verification results;
-- reusable workflow lessons.
+- proof chains;
+- reusable mappings;
+- deliverables;
+- contradictions.
 
-Do not save trivial chat, secrets, raw credentials, highly private data, or unverified speculation as fact.
+Do not save trivial chat, secrets, raw private screenshots, private financial records, unverified guesses, or anything the user marked as not for saving.
 
-## Public Repo Boundary
+## Memory Graph
 
-Public repos should contain method, fixtures, and redacted examples.
+When a route succeeds, strengthen it. When a route fails, weaken it or add an `avoid_if` / `suppress` edge. Keep evidence paths so future agents can audit why the route changed.
 
-Private repos or local vaults should contain real notes, clients, transcripts, financial data, production IDs, and internal company details.
+## Dry-Run-First Maintenance
 
+Automation should report before it writes. Consolidation may identify stale notes, orphan candidates, low-confidence edges, and duplicate candidates, but deletion, archival, merging, or dense historical rewriting requires explicit permission.
+
+## Public Safety
+
+If this vault or system is published, publish only:
+
+- methods;
+- schemas;
+- redacted examples;
+- synthetic fixtures;
+- safe docs.
+
+Never publish real secrets, customer data, private notes, raw transcripts, production identifiers, or private vault exports.

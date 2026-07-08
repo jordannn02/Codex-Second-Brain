@@ -17,10 +17,21 @@ This dev log demonstrates delivery-first behavior across three examples: debuggi
 
 ## Work Completed
 
-- Replaced a weak extraction example with three workflow examples.
-- Demonstrated route reinforcement, route suppression, automatic triggers, and capability-aware routing.
-- Preserved the boundary between public method and private memory.
+- Added route-learning examples under `Knowledge/Examples/`.
+- Added JSONL memory graph and capture-event fixtures.
+- Added a synthetic `momo-tools` route result.
+- Added dry-run validation and consolidation examples.
 
-## Verification Boundary
+## Verification
 
-This demo proves the documentation structure, not a live production integration. Real projects should attach their own verification commands, source paths, and safety boundaries.
+Run from the repository root:
+
+```bash
+python3 -m codex_second_brain.cli validate demo-vault
+python3 -m codex_second_brain.cli consolidate demo-vault --dry-run
+python3 -m codex_second_brain.cli route-suggest demo-vault "debugging noisy search source trace"
+```
+
+## Boundary
+
+No real customer data, production IDs, credentials, screenshots, or private meeting content are included.

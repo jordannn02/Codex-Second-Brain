@@ -1,0 +1,27 @@
+{
+  "source": "synthetic momo-tools route result",
+  "task": "User asks the agent to inspect a repository, update docs, and publish a safe change.",
+  "route": {
+    "capability": "github_publish_workflow",
+    "risk_level": "medium",
+    "gates": [
+      "inspect working tree",
+      "stage intended files only",
+      "run validation",
+      "push after successful checks"
+    ]
+  },
+  "verification": {
+    "status": "verified-working",
+    "evidence": [
+      "git status clean before start",
+      "documentation validation passed",
+      "remote branch confirmed after push"
+    ]
+  },
+  "second_brain_capture": {
+    "type": "route-worked",
+    "candidate_edge": "edge_momo_route_result_to_memory_graph",
+    "dry_run_first": true
+  }
+}

@@ -15,11 +15,11 @@ confidence: example
 
 ## For future Claude
 
-Use this note to demonstrate how the system learns from a failed debugging route. The key behavior is that a bad path is weakened while a verified corrected path is reinforced.
+Use this note to demonstrate how the system learns from a failed debugging route. The important behavior is that the noisy route is weakened while the verified corrected route is reinforced.
 
 ## Scenario
 
-A user asks the agent to diagnose why a feature fails after a recent change.
+The user asks the agent to diagnose why a feature fails after a recent change.
 
 ## First Attempt
 
@@ -56,4 +56,3 @@ Outcome: faster and easier to verify.
 ## Reusable Lesson
 
 When broad search creates noise, weaken that route and reinforce graph-first debugging for similar tasks.
-

@@ -15,5 +15,7 @@ exports-private/
 # Keep generated caches out of the public repo.
 __pycache__/
 .pytest_cache/
+*.egg-info/
+build/
+dist/
 node_modules/
-

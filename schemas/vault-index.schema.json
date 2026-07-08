@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jordannn02/Codex-Second-Brain/schemas/vault-index.schema.json",
+  "title": "Codex Second Brain Vault Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "generated_at",
+    "vault",
+    "startup_files",
+    "entries"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "vault": {
+      "type": "string"
+    },
+    "startup_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "contains": {
+        "const": "_CLAUDE.md"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "title",
+          "type",
+          "summary"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "last_verified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "unverified",
+              "inferred",
+              "verified",
+              "stale"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

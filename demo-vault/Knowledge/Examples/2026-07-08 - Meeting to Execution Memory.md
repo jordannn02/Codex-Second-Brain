@@ -15,7 +15,7 @@ confidence: example
 
 ## For future Claude
 
-Use this note to demonstrate automatic capture after a meeting. The agent delivers the meeting summary first, then captures durable execution memory.
+Use this note to demonstrate meeting capture without storing raw transcripts. The agent delivers the meeting summary first, then captures only durable execution memory.
 
 ## Scenario
 
@@ -29,7 +29,7 @@ A meeting produces:
 
 ## Delivery First
 
-The agent first returns the usable meeting summary:
+The agent first returns a usable meeting summary:
 
 ```text
 decision -> owner -> due date -> risk -> next verification step
@@ -39,7 +39,7 @@ decision -> owner -> due date -> risk -> next verification step
 
 After delivery, the system saves durable signals:
 
-- decision and rationale;
+- decision rationale;
 - owner and next action;
 - repeated theme;
 - contradiction with prior notes, if any;
@@ -47,9 +47,8 @@ After delivery, the system saves durable signals:
 
 ## Weekly Consolidation
 
-Repeated meeting themes can become reusable rules. Contradictions between old decisions and new conclusions are surfaced for review instead of silently overwritten.
+Repeated meeting themes can become reusable rules. Contradictions between old decisions and new conclusions are surfaced for review instead of being silently overwritten.
 
 ## Reusable Lesson
 
-Meeting memory is not just a transcript. It is a bridge from discussion to execution.
-
+Meeting memory is not a transcript archive. It is the bridge from discussion to execution.

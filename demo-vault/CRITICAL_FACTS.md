@@ -16,4 +16,3 @@ Tiny demo-only context. Keep this file short so it can be loaded at session star
 - Vault: public-safe demo vault.
 - Data policy: synthetic examples only.
 - Primary workflow: delivery first, capture second.
-

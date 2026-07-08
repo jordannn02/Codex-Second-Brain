@@ -1,6 +1,8 @@
 # Weekly Consolidation
 
-Weekly consolidation is the automatic maintenance loop that keeps the second brain usable without turning every task into cleanup work.
+Weekly consolidation is the maintenance loop that keeps a second brain usable without turning every task into cleanup work.
+
+The public reference implementation is dry-run-first. It reports candidates before any write, and it never performs destructive cleanup.
 
 ## What It Does
 
@@ -13,27 +15,27 @@ Weekly consolidation is the automatic maintenance loop that keeps the second bra
 - report cleanup candidates before destructive action;
 - preserve evidence-bearing notes.
 
-## Automatic Trigger Model
+## Trigger Model
 
 Consolidation can be triggered by:
 
-- a scheduled weekly automation;
-- an explicit command;
-- a post-delivery maintenance step;
-- a health-check report;
+- scheduled weekly automation;
+- explicit command;
+- post-delivery maintenance step;
+- health-check report;
 - repeated graph failures that suggest a route needs review.
 
-## Safe Actions
+## Safe Dry-Run Actions
 
-Safe weekly actions:
+Safe dry-run actions:
 
-- append missing backlinks;
-- update index descriptions;
-- summarize recent logs;
+- count Markdown files;
+- find missing startup files;
+- identify orphan candidates;
+- list low-confidence memory edges;
 - flag stale tasks;
 - identify duplicate candidates;
-- lower weights on unused graph edges;
-- create a review report for risky cleanup.
+- report permission-required actions.
 
 ## Actions That Need Explicit Permission
 
@@ -46,14 +48,19 @@ Ask before:
 - publishing or exporting private content;
 - modifying production systems.
 
+## CLI Example
+
+```bash
+python3 -m codex_second_brain.cli consolidate demo-vault --dry-run
+```
+
 ## Report Format
 
 ```text
-configured: what automation or rule exists
-executed: what actually ran
+configured: automation rule exists
+executed: actually ran
 verified-working: what was checked and passed
 pending: what still needs review
 ```
 
 This distinction prevents confusing "set up" with "proven working".
-

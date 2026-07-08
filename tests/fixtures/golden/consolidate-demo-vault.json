@@ -1,0 +1,9 @@
+{
+  "mode": "dry-run",
+  "expected": {
+    "startup_missing": [],
+    "contains_permission_boundary": true,
+    "contains_memory_graph_edges": true,
+    "contains_capture_events": true
+  }
+}
