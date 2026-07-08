@@ -1,39 +1,39 @@
 # System Package
 
-This folder contains the public-safe operating layer of the second brain project.
+This folder contains the public-safe operating layer of Codex Second Brain OS.
 
-It is meant to be copied, adapted, and trimmed. It is not a dump of a private vault.
+It is designed for agents that need to improve their own routing behavior over time, not merely store notes.
 
 ## Components
 
 | File | Purpose |
 |---|---|
-| `AGENTS.example.md` | Minimal agent operating manual for capability routing, delivery-first behavior, and safe capture. |
-| `capture-routing.md` | Rules for deciding what gets saved after a task. |
-| `memory-graph.md` | Lightweight model for turning repeated workflow attempts into reusable routing edges. |
-| `weekly-consolidation.md` | Maintenance loop for indexes, stale captures, and evidence preservation. |
+| `AGENTS.example.md` | Minimal agent operating manual for startup context, delivery-first behavior, adaptive routing, and safety boundaries. |
+| `capture-routing.md` | Rules for deciding what gets saved after a task and what must remain unsaved. |
+| `memory-graph.md` | Self-improving route memory: reinforcement, weakening, suppression, evidence chains, and correction loops. |
+| `weekly-consolidation.md` | Automated maintenance loop for stale captures, indexes, graph decay, and cleanup review. |
 | `.codex/commands/README.md` | Public command catalog pattern without private command bodies. |
 
-## Design Principle
+## System Responsibilities
 
-The system layer should answer:
+The system layer should answer six questions for every non-trivial task:
 
 1. What context should the agent load before acting?
-2. How should the agent choose tools?
-3. What must be delivered to the user first?
-4. What evidence is strong enough for the claim?
-5. What should be saved for next time?
-6. What must never be published?
+2. Which capability should the agent use first?
+3. What must be delivered before memory work begins?
+4. What evidence is required before a claim is trusted?
+5. What route should be strengthened, weakened, or suppressed?
+6. What should never be published or saved?
 
-## Recommended Adoption Order
+## Adoption Order
 
-1. Add `AGENTS.example.md` rules to your agent environment.
-2. Create a tiny `_CLAUDE.md`, `index.md`, `Home.md`, and `CRITICAL_FACTS.md` in your vault.
-3. Use `capture-routing.md` manually for a week.
-4. Add memory graph only after you can name repeated workflow wins and failures.
-5. Add weekly consolidation once append-only captures start to accumulate.
+1. Start with `AGENTS.example.md`.
+2. Add `_CLAUDE.md`, `index.md`, `Home.md`, and `CRITICAL_FACTS.md` to your own vault.
+3. Use `capture-routing.md` manually until the save boundary feels reliable.
+4. Add `memory-graph.md` once you can identify repeated successful and failed routes.
+5. Add `weekly-consolidation.md` when append-only captures start piling up.
 
 ## Safety Boundary
 
-Keep this folder public-safe. Do not add credentials, raw transcripts, customer names, production document numbers, private screenshots, or company-specific internal logic.
+Keep this folder public-safe. Do not add credentials, raw transcripts, customer names, production document numbers, private screenshots, company-specific procedures, or real private vault exports.
 

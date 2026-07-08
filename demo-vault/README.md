@@ -2,19 +2,11 @@
 
 This is a redacted, synthetic Obsidian vault example.
 
-It shows how the system behaves without exposing a real life/work vault.
+It shows three practical scenarios that make the system useful:
 
-## Scenario
-
-A user asks an AI agent to convert a screenshot into a Markdown table.
-
-The agent:
-
-1. loads startup context;
-2. classifies the task as image/document extraction;
-3. delivers a clean Markdown table;
-4. records only the reusable workflow signal;
-5. leaves broad cleanup for weekly consolidation.
+1. a debugging workflow that learns from failure;
+2. an auto-router that chooses tools when the user has too many options;
+3. a meeting-to-execution workflow that turns decisions into durable memory.
 
 ## Files
 
@@ -24,11 +16,13 @@ The agent:
 | `index.md` | Navigation map for future agents. |
 | `Home.md` | Simple dashboard. |
 | `CRITICAL_FACTS.md` | Tiny always-load context. |
-| `Knowledge/Examples/2026-07-08 - Image to Markdown Workflow.md` | Example knowledge note. |
-| `Dev Logs/2026-07-08 - Demo Screenshot Conversion.md` | Example work log. |
+| `Knowledge/Examples/2026-07-08 - Repeated Debugging Route Learning.md` | Debugging route reinforcement example. |
+| `Knowledge/Examples/2026-07-08 - Tool Overload Auto Router.md` | Capability routing example. |
+| `Knowledge/Examples/2026-07-08 - Meeting to Execution Memory.md` | Meeting capture and consolidation example. |
+| `Dev Logs/2026-07-08 - Demo Adaptive Routing Cases.md` | Example implementation log. |
 | `Logs/2026-07-08.md` | Operation log. |
 
 ## Redaction Rule
 
-Everything here is fake. Replace examples with your own synthetic fixtures before publishing.
+Everything here is synthetic. Replace examples with your own public-safe fixtures before publishing.
 

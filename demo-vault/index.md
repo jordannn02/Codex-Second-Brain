@@ -21,11 +21,13 @@ This public-safe demo index maps the synthetic vault. Use it to demonstrate how 
 
 ## Knowledge
 
-- [[Knowledge/Examples/2026-07-08 - Image to Markdown Workflow]] - example task workflow and capture boundary.
+- [[Knowledge/Examples/2026-07-08 - Repeated Debugging Route Learning]] - failed route suppression and corrected route reinforcement.
+- [[Knowledge/Examples/2026-07-08 - Tool Overload Auto Router]] - capability-aware routing when many tools are available.
+- [[Knowledge/Examples/2026-07-08 - Meeting to Execution Memory]] - meeting decisions converted into durable execution memory.
 
 ## Dev Logs
 
-- [[Dev Logs/2026-07-08 - Demo Screenshot Conversion]] - example delivery-first work log.
+- [[Dev Logs/2026-07-08 - Demo Adaptive Routing Cases]] - example delivery-first work log for the three demo cases.
 
 ## Operation Logs
 

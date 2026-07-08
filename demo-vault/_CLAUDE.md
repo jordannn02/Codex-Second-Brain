@@ -2,11 +2,11 @@
 
 ## For future Claude
 
-This is a public-safe demo vault. Use it to understand the workflow pattern, not as private user memory. All people, companies, document numbers, and task details are synthetic.
+This is a public-safe demo vault. Use it to understand the workflow pattern, not as private user memory. All people, companies, document numbers, task details, and examples are synthetic.
 
 ## Startup Files
 
-Read these before non-trivial work:
+Read these files before non-trivial work:
 
 - `index.md`
 - `Home.md`
@@ -20,10 +20,11 @@ After delivery, save only durable signals:
 
 - reusable workflow paths;
 - source and output filenames;
-- verification boundary;
-- future routing lesson.
+- verification boundaries;
+- route reinforcement or suppression lessons;
+- future routing guidance.
 
 ## Safety Boundary
 
-Do not add real client data, production IDs, private screenshots, credentials, transcripts, or financial notes to this demo vault.
+Do not add real client data, production IDs, private screenshots, credentials, transcripts, financial notes, or internal company procedures to this demo vault.
 

@@ -1,15 +1,27 @@
 # Weekly Consolidation
 
-Weekly consolidation keeps the vault useful without turning every task into a cleanup project.
+Weekly consolidation is the automatic maintenance loop that keeps the second brain usable without turning every task into cleanup work.
 
-## Purpose
+## What It Does
 
 - refresh navigation indexes;
 - surface stale rules;
-- find orphan notes;
-- detect repeated captures that should become a reusable rule;
-- keep evidence-bearing notes intact;
-- report risky cleanup candidates before touching them.
+- detect orphan notes;
+- review low-confidence graph edges;
+- decay unused routes;
+- promote repeated captures into reusable rules;
+- report cleanup candidates before destructive action;
+- preserve evidence-bearing notes.
+
+## Automatic Trigger Model
+
+Consolidation can be triggered by:
+
+- a scheduled weekly automation;
+- an explicit command;
+- a post-delivery maintenance step;
+- a health-check report;
+- repeated graph failures that suggest a route needs review.
 
 ## Safe Actions
 
@@ -17,10 +29,11 @@ Safe weekly actions:
 
 - append missing backlinks;
 - update index descriptions;
-- summarize recent dev logs;
+- summarize recent logs;
 - flag stale tasks;
-- identify duplicates for review;
-- create a report of risky cleanup candidates.
+- identify duplicate candidates;
+- lower weights on unused graph edges;
+- create a review report for risky cleanup.
 
 ## Actions That Need Explicit Permission
 

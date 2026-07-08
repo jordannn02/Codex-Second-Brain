@@ -1,84 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
-  <title id="title">Codex Second Brain workflow</title>
-  <desc id="desc">A workflow diagram showing startup context, capability routing, delivery first, capture routing, memory graph, and weekly consolidation.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-labelledby="title desc">
+  <title id="title">Human-memory-inspired agent learning loop</title>
+  <desc id="desc">A brain-shaped diagram showing how Codex Second Brain OS encodes context, retrieves routes, reinforces successful links, suppresses failed links, consolidates memory, and triggers autonomous maintenance.</desc>
   <defs>
     <style>
-      .bg { fill: #f7f4ef; }
-      .ink { fill: #18201d; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      .muted { fill: #52615b; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      .box { fill: #ffffff; stroke: #20332b; stroke-width: 2; rx: 14; }
-      .box-green { fill: #d9efe1; stroke: #20332b; stroke-width: 2; rx: 14; }
-      .box-gold { fill: #f3dfaa; stroke: #20332b; stroke-width: 2; rx: 14; }
-      .box-blue { fill: #dce8f7; stroke: #20332b; stroke-width: 2; rx: 14; }
-      .line { stroke: #20332b; stroke-width: 3; fill: none; marker-end: url(#arrow); }
-      .dash { stroke: #7b6750; stroke-width: 2.5; fill: none; stroke-dasharray: 8 8; marker-end: url(#arrow-muted); }
-      .title { font-size: 34px; font-weight: 760; letter-spacing: 0; }
-      .subtitle { font-size: 18px; font-weight: 520; letter-spacing: 0; }
-      .label { font-size: 21px; font-weight: 720; letter-spacing: 0; }
-      .small { font-size: 15px; font-weight: 520; letter-spacing: 0; }
-      .tiny { font-size: 13px; font-weight: 520; letter-spacing: 0; }
+      .bg { fill: #0e1418; }
+      .brain { fill: #f7efe3; stroke: #101820; stroke-width: 5; }
+      .lobe { fill: none; stroke: #24342f; stroke-width: 4; stroke-linecap: round; }
+      .node { fill: #2ec4a6; stroke: #0e1418; stroke-width: 4; }
+      .node2 { fill: #ffd166; stroke: #0e1418; stroke-width: 4; }
+      .node3 { fill: #8ecae6; stroke: #0e1418; stroke-width: 4; }
+      .node4 { fill: #ef476f; stroke: #0e1418; stroke-width: 4; }
+      .synapse { stroke: #24342f; stroke-width: 6; fill: none; stroke-linecap: round; }
+      .boost { stroke: #2ec4a6; stroke-width: 8; fill: none; stroke-linecap: round; marker-end: url(#arrow-boost); }
+      .decay { stroke: #ef476f; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 13 12; marker-end: url(#arrow-decay); }
+      .auto { stroke: #ffd166; stroke-width: 6; fill: none; stroke-linecap: round; stroke-dasharray: 4 12; marker-end: url(#arrow-auto); }
+      .ink { fill: #f8faf7; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .dark { fill: #111b1f; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .muted { fill: #aab9b3; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .label { fill: #20342f; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 24px; font-weight: 800; letter-spacing: 0; }
+      .small { fill: #3f514b; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 17px; font-weight: 650; letter-spacing: 0; }
+      .title { font-size: 48px; font-weight: 840; }
+      .subtitle { font-size: 23px; font-weight: 560; }
+      .callout { fill: #152126; stroke: #33463f; stroke-width: 2; rx: 18; }
+      .chip { fill: #f7efe3; stroke: #101820; stroke-width: 3; rx: 14; }
+      .chipText { fill: #111b1f; font-family: Inter, ui-sans-serif, system-ui; font-size: 18px; font-weight: 760; letter-spacing: 0; }
     </style>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#20332b" />
+    <marker id="arrow-boost" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#2ec4a6" />
     </marker>
-    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#7b6750" />
+    <marker id="arrow-decay" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#ef476f" />
     </marker>
+    <marker id="arrow-auto" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#ffd166" />
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
   </defs>
 
-  <rect class="bg" width="1200" height="650" />
-  <text class="ink title" x="60" y="70">Codex Second Brain OS</text>
-  <text class="muted subtitle" x="60" y="105">Delivery-first operating loop for AI agents.</text>
-  <text class="muted subtitle" x="60" y="132">Markdown memory, evidence boundaries, capability routing, and safe capture.</text>
+  <rect class="bg" width="1400" height="900" />
+  <text class="ink title" x="70" y="86">Adaptive Route Memory for Agents</text>
+  <text class="muted subtitle" x="70" y="124">Failure-path weakening, self-correction, success-route reinforcement.</text>
 
-  <rect class="box-green" x="50" y="170" width="245" height="116" />
-  <text class="ink label" x="76" y="208">1. Startup context</text>
-  <text class="muted small" x="76" y="240">Read _CLAUDE, index,</text>
-  <text class="muted small" x="76" y="264">Home, CRITICAL_FACTS.</text>
+  <g transform="translate(0 72)">
+  <g filter="url(#softShadow)">
+    <path class="brain" d="M353 449 C294 421 264 367 279 309 C291 260 331 229 382 226 C397 174 444 142 500 149 C530 102 596 88 647 123 C693 84 771 88 814 136 C871 128 928 163 944 219 C1004 229 1049 277 1051 339 C1110 379 1115 465 1062 512 C1071 571 1037 628 982 649 C966 705 903 738 848 717 C804 760 731 760 688 715 C638 749 567 738 531 687 C469 701 412 665 398 607 C342 594 305 547 306 494 C306 475 323 459 353 449 Z" />
+    <path class="lobe" d="M382 267 C433 253 469 275 491 314 C531 272 594 272 629 315 C664 262 744 259 781 314 C824 278 894 291 914 354" />
+    <path class="lobe" d="M345 387 C392 358 448 373 472 421 C527 388 601 402 627 464 C681 412 770 414 810 474 C849 431 934 435 974 489" />
+    <path class="lobe" d="M388 536 C450 526 495 554 515 605 C577 568 652 580 686 641 C732 589 825 584 868 642 C918 610 971 601 1016 626" />
+  </g>
 
-  <rect class="box-blue" x="335" y="170" width="245" height="116" />
-  <text class="ink label" x="361" y="208">2. Route capability</text>
-  <text class="muted small" x="361" y="240">Pick tools by task type,</text>
-  <text class="muted small" x="361" y="264">not by habit.</text>
+  <path class="synapse" d="M448 332 C526 300 602 309 679 364" />
+  <path class="synapse" d="M679 364 C764 342 842 365 910 430" />
+  <path class="synapse" d="M493 533 C591 499 673 520 753 590" />
+  <path class="boost" d="M452 332 C565 258 744 269 910 430" />
+  <path class="decay" d="M918 334 C861 305 808 310 766 347" />
+  <path class="auto" d="M692 660 C731 721 817 755 913 722" />
 
-  <rect class="box-gold" x="620" y="170" width="245" height="116" />
-  <text class="ink label" x="646" y="208">3. Deliver first</text>
-  <text class="muted small" x="646" y="240">Return the answer, file,</text>
-  <text class="muted small" x="646" y="264">query, or artifact.</text>
+  <circle class="node" cx="448" cy="332" r="22" />
+  <circle class="node2" cx="679" cy="364" r="22" />
+  <circle class="node3" cx="910" cy="430" r="22" />
+  <circle class="node" cx="493" cy="533" r="22" />
+  <circle class="node2" cx="753" cy="590" r="22" />
+  <circle class="node4" cx="918" cy="334" r="20" />
+  <circle class="node3" cx="913" cy="722" r="20" />
 
-  <rect class="box" x="905" y="170" width="245" height="116" />
-  <text class="ink label" x="931" y="208">4. Verify boundary</text>
-  <text class="muted small" x="931" y="240">Separate memory, docs,</text>
-  <text class="muted small" x="931" y="264">source, SQL, runtime.</text>
+  <rect class="chip" x="306" y="188" width="220" height="70" />
+  <text class="label" x="330" y="219">Evidence Layers</text>
+  <text class="small" x="330" y="244">memory is not proof</text>
 
-  <path class="line" d="M295 228 H330" />
-  <path class="line" d="M580 228 H615" />
-  <path class="line" d="M865 228 H900" />
+  <rect class="chip" x="565" y="210" width="228" height="70" />
+  <text class="label" x="589" y="241">Route Memory</text>
+  <text class="small" x="589" y="266">retrieve proven paths</text>
 
-  <rect class="box" x="105" y="385" width="285" height="130" />
-  <text class="ink label" x="132" y="425">5. Capture routing</text>
-  <text class="muted small" x="132" y="457">Save durable signals:</text>
-  <text class="muted small" x="132" y="481">decisions, paths, guards,</text>
-  <text class="muted small" x="132" y="505">results, lessons.</text>
+  <rect class="chip" x="855" y="206" width="242" height="74" />
+  <text class="label" x="879" y="237">Reinforce Success</text>
+  <text class="small" x="879" y="262">verified paths get stronger</text>
 
-  <rect class="box-green" x="457" y="385" width="285" height="130" />
-  <text class="ink label" x="484" y="425">6. Memory graph</text>
-  <text class="muted small" x="484" y="457">Strengthen good routes,</text>
-  <text class="muted small" x="484" y="481">suppress repeated failures,</text>
-  <text class="muted small" x="484" y="505">keep evidence links.</text>
+  <rect class="chip" x="880" y="512" width="242" height="74" />
+  <text class="label" x="904" y="543">Weaken Failures</text>
+  <text class="small" x="904" y="568">bad paths decay or suppress</text>
 
-  <rect class="box-blue" x="809" y="385" width="285" height="130" />
-  <text class="ink label" x="836" y="425">7. Consolidation</text>
-  <text class="muted small" x="836" y="457">Refresh indexes, surface</text>
-  <text class="muted small" x="836" y="481">stale rules, preserve</text>
-  <text class="muted small" x="836" y="505">source evidence.</text>
+  <rect class="chip" x="333" y="624" width="250" height="74" />
+  <text class="label" x="357" y="655">Weekly Consolidation</text>
+  <text class="small" x="357" y="680">auto-triggered maintenance</text>
 
-  <path class="dash" d="M1028 290 C1028 335 951 340 951 380" />
-  <path class="line" d="M390 450 H452" />
-  <path class="line" d="M742 450 H804" />
-  <path class="dash" d="M600 380 C600 335 457 335 457 290" />
+  <rect class="chip" x="624" y="698" width="270" height="74" />
+  <text class="label" x="648" y="729">Adaptive Tool Choice</text>
+  <text class="small" x="648" y="754">capability routing learns</text>
 
-  <rect x="60" y="590" width="1085" height="66" rx="12" fill="#20332b" />
-  <text x="88" y="617" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="17" font-weight="650" letter-spacing="0">Design principle: public method, private memory.</text>
-  <text x="88" y="642" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="17" font-weight="650" letter-spacing="0">Ship the answer first; save only what makes the next task faster and more reliable.</text>
+  </g>
+
+  <rect class="callout" x="70" y="860" width="1260" height="92" />
+  <text class="ink" x="100" y="891" font-size="23" font-weight="760">Human-memory design: reinforce, inhibit, retrieve, consolidate, adapt.</text>
+  <text class="muted" x="100" y="919" font-size="18" font-weight="560">Associations strengthen with use, unused paths decay, and verified experience</text>
+  <text class="muted" x="100" y="945" font-size="18" font-weight="560">becomes future routing intelligence.</text>
 </svg>
