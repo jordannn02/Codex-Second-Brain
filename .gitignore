@@ -1,0 +1,19 @@
+# Keep public package clean.
+.DS_Store
+.obsidian/
+workspace.json
+
+# Never publish local secrets or private exports.
+.env
+*.key
+*.pem
+*.p12
+private/
+raw-private/
+exports-private/
+
+# Keep generated caches out of the public repo.
+__pycache__/
+.pytest_cache/
+node_modules/
+
