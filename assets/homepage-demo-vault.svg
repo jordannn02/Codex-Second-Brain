@@ -1,96 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
-  <title id="title">Redacted demo vault as memory anatomy</title>
-  <desc id="desc">A brain-inspired diagram showing a public-safe demo vault as memory anatomy: sensory input, working memory, long-term memory, retrieval cues, inhibitory control, and consolidation.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Demo vault route memory</title>
+  <desc id="desc">A stable GitHub README diagram showing the public demo vault as a route-memory operating layer.</desc>
   <defs>
     <style>
       .bg { fill: #f8f2e8; }
+      .panel { fill: #ffffff; stroke: #18221f; stroke-width: 4; rx: 20; }
+      .chipA { fill: #dff3e8; stroke: #18221f; stroke-width: 4; rx: 20; }
+      .chipB { fill: #fff0bd; stroke: #18221f; stroke-width: 4; rx: 20; }
+      .chipC { fill: #dcecff; stroke: #18221f; stroke-width: 4; rx: 20; }
+      .chipD { fill: #ffd7df; stroke: #18221f; stroke-width: 4; rx: 20; }
       .ink { fill: #11191d; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
       .muted { fill: #51605b; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
       .title { font-size: 48px; font-weight: 840; }
       .subtitle { font-size: 22px; font-weight: 560; }
-      .brain { fill: #ffffff; stroke: #18221f; stroke-width: 5; }
-      .zoneA { fill: #dff3e8; stroke: #18221f; stroke-width: 3; }
-      .zoneB { fill: #fff0bd; stroke: #18221f; stroke-width: 3; }
-      .zoneC { fill: #dcecff; stroke: #18221f; stroke-width: 3; }
-      .zoneD { fill: #ffd7df; stroke: #18221f; stroke-width: 3; }
-      .panel { fill: #ffffff; stroke: #18221f; stroke-width: 3; rx: 16; }
+      .label { font-size: 27px; font-weight: 830; }
+      .small { font-size: 18px; font-weight: 620; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 18px; font-weight: 760; }
       .line { stroke: #18221f; stroke-width: 5; fill: none; stroke-linecap: round; marker-end: url(#arrow); }
-      .dash { stroke: #ef476f; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 12 12; marker-end: url(#arrow-red); }
-      .label { fill: #11191d; font-family: Inter, ui-sans-serif, system-ui; font-size: 22px; font-weight: 820; letter-spacing: 0; }
-      .small { fill: #51605b; font-family: Inter, ui-sans-serif, system-ui; font-size: 16px; font-weight: 620; letter-spacing: 0; }
-      .mono { fill: #11191d; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 17px; font-weight: 760; letter-spacing: 0; }
+      .dash { stroke: #ef476f; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 13 12; marker-end: url(#arrowRed); }
+      .softLine { stroke: #7a8a84; stroke-width: 4; fill: none; stroke-linecap: round; }
     </style>
     <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L10,4 L0,8 Z" fill="#18221f" />
     </marker>
-    <marker id="arrow-red" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+    <marker id="arrowRed" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L10,4 L0,8 Z" fill="#ef476f" />
     </marker>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.18"/>
-    </filter>
   </defs>
 
-  <rect class="bg" width="1400" height="900" />
+  <rect class="bg" width="1400" height="820" />
   <text class="ink title" x="70" y="84">Demo Vault: Route Memory</text>
-  <text class="muted subtitle" x="70" y="122">Debugging route learning, tool auto-routing, meeting-to-execution memory.</text>
-  <text class="muted subtitle" x="70" y="152">Evidence layers, verifiable conclusions, capture routing, weekly consolidation.</text>
+  <text class="muted subtitle" x="70" y="122">Synthetic examples show how repeated work becomes safer future routing.</text>
 
-  <g filter="url(#shadow)">
-    <path class="brain" d="M426 436 C361 409 330 352 348 292 C363 243 405 214 456 216 C475 166 526 139 579 152 C619 113 686 108 733 146 C783 117 852 131 884 181 C939 182 986 224 995 279 C1052 304 1081 365 1060 421 C1102 471 1081 552 1021 579 C1017 638 968 683 907 682 C865 730 790 735 741 691 C692 724 622 713 590 661 C529 671 476 635 463 578 C409 565 374 521 375 472 C375 454 392 441 426 436 Z" />
-    <path class="zoneA" d="M424 292 C463 252 536 249 581 293 C548 335 501 350 447 335 C431 327 422 314 424 292 Z" />
-    <path class="zoneB" d="M615 228 C679 195 771 208 815 274 C785 328 694 349 623 306 C600 284 598 252 615 228 Z" />
-    <path class="zoneC" d="M493 444 C566 401 664 414 714 486 C681 548 576 564 506 514 C482 495 476 466 493 444 Z" />
-    <path class="zoneD" d="M792 424 C853 386 948 401 991 468 C966 532 865 553 804 505 C780 486 775 446 792 424 Z" />
-  </g>
+  <rect class="panel" x="70" y="174" width="300" height="148" />
+  <text class="ink label" x="104" y="216">Startup Files</text>
+  <text class="ink mono" x="104" y="252">_CLAUDE.md</text>
+  <text class="ink mono" x="104" y="282">index.md</text>
+  <text class="ink mono" x="104" y="312">CRITICAL_FACTS.md</text>
 
-  <rect class="panel" x="70" y="210" width="260" height="132" />
-  <text class="label" x="100" y="248">Capability Routing</text>
-  <text class="small" x="100" y="282">classify the task,</text>
-  <text class="small" x="100" y="306">select the right tool</text>
+  <rect class="panel" x="70" y="380" width="300" height="148" />
+  <text class="ink label" x="104" y="422">Capture Events</text>
+  <text class="muted small" x="104" y="458">what changed, why it matters</text>
+  <text class="muted small" x="104" y="488">evidence stays attached</text>
 
-  <rect class="panel" x="70" y="390" width="260" height="150" />
-  <text class="label" x="100" y="428">Working Memory</text>
-  <text class="mono" x="100" y="462">_CLAUDE.md</text>
-  <text class="mono" x="100" y="492">index.md</text>
-  <text class="mono" x="100" y="522">CRITICAL_FACTS.md</text>
+  <rect class="chipA" x="450" y="174" width="270" height="122" />
+  <text class="ink label" x="484" y="216">Auto-Router</text>
+  <text class="muted small" x="484" y="252">choose the right capability</text>
 
-  <rect class="panel" x="1070" y="218" width="260" height="142" />
-  <text class="label" x="1100" y="256">Route Memory</text>
-  <text class="mono" x="1100" y="290">debug route</text>
-  <text class="mono" x="1100" y="320">tool router</text>
-  <text class="mono" x="1100" y="350">meeting memory</text>
+  <rect class="chipB" x="790" y="174" width="270" height="122" />
+  <text class="ink label" x="824" y="216">Route Memory</text>
+  <text class="muted small" x="824" y="252">reuse proven paths</text>
 
-  <rect class="panel" x="1070" y="430" width="260" height="154" />
-  <text class="label" x="1100" y="468">Weakening Layer</text>
-  <text class="small" x="1100" y="502">failed paths decay</text>
-  <text class="small" x="1100" y="528">bad routes suppressed</text>
-  <text class="small" x="1100" y="554">private data excluded</text>
+  <rect class="chipC" x="450" y="380" width="270" height="122" />
+  <text class="ink label" x="484" y="422">Deliver</text>
+  <text class="muted small" x="484" y="458">visible result first</text>
 
-  <rect class="panel" x="470" y="690" width="510" height="120" />
-  <text class="label" x="500" y="728">Weekly Consolidation</text>
-  <text class="small" x="500" y="760">auto-triggered capture</text>
-  <text class="small" x="500" y="784">turns repeated signals into route memory</text>
+  <rect class="chipD" x="790" y="380" width="270" height="122" />
+  <text class="ink label" x="824" y="422">Suppress Noise</text>
+  <text class="muted small" x="824" y="458">failed routes decay</text>
 
-  <path class="line" d="M330 276 C372 282 396 294 424 309" />
-  <path class="line" d="M330 466 C383 464 430 458 493 466" />
-  <path class="line" d="M815 274 C904 269 996 278 1064 294" />
-  <path class="dash" d="M991 468 C1017 476 1043 487 1064 503" />
-  <path class="line" d="M714 486 C721 565 701 632 700 694" />
+  <rect class="panel" x="1110" y="252" width="220" height="172" />
+  <text class="ink label" x="1142" y="294">Demo Only</text>
+  <text class="muted small" x="1142" y="330">no private vault</text>
+  <text class="muted small" x="1142" y="360">no credentials</text>
+  <text class="muted small" x="1142" y="390">safe to inspect</text>
 
-  <text class="label" x="451" y="287">Auto-Router</text>
-  <text class="small" x="451" y="313">adaptive tool selection</text>
+  <path class="line" d="M370 246 H450" />
+  <path class="line" d="M720 235 H790" />
+  <path class="line" d="M1060 235 C1110 245 1120 260 1110 300" />
+  <path class="line" d="M370 454 H450" />
+  <path class="dash" d="M720 442 H790" />
+  <path class="softLine" d="M925 502 C925 580 760 616 584 502" />
+  <path class="softLine" d="M584 296 C584 340 584 354 584 380" />
 
-  <text class="label" x="636" y="262">Retrieve</text>
-  <text class="small" x="636" y="288">route memory</text>
+  <rect class="panel" x="260" y="606" width="880" height="102" />
+  <text class="ink label" x="294" y="648">Weekly Consolidation</text>
+  <text class="muted small" x="294" y="684">turn repeated signals into route memory, but report before writing or deleting.</text>
 
-  <text class="label" x="526" y="471">Deliver</text>
-  <text class="small" x="526" y="497">verifiable conclusion</text>
-
-  <text class="label" x="816" y="464">Capture Routing</text>
-  <text class="small" x="816" y="490">only durable signals</text>
-
-  <rect class="panel" x="70" y="816" width="1260" height="72" />
-  <text class="ink" x="100" y="843" font-size="20" font-weight="760">Public demo vault: synthetic memory anatomy.</text>
-  <text class="ink" x="100" y="870" font-size="20" font-weight="760">Real private memory stays outside the public repository.</text>
+  <rect class="panel" x="70" y="742" width="1260" height="52" />
+  <text class="ink small" x="104" y="775">Public demo vault: synthetic memory anatomy. Real private memory stays outside the public repository.</text>
 </svg>

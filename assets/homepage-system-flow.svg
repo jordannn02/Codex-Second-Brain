@@ -1,99 +1,98 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-labelledby="title desc">
-  <title id="title">Human-memory-inspired agent learning loop</title>
-  <desc id="desc">A brain-shaped diagram showing how Codex Second Brain OS encodes context, retrieves routes, reinforces successful links, suppresses failed links, consolidates memory, and triggers autonomous maintenance.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Adaptive route memory for agents</title>
+  <desc id="desc">A stable GitHub README diagram showing startup context, route memory, evidence checks, delivery, capture, and consolidation.</desc>
   <defs>
     <style>
       .bg { fill: #0e1418; }
-      .brain { fill: #f7efe3; stroke: #101820; stroke-width: 5; }
-      .lobe { fill: none; stroke: #24342f; stroke-width: 4; stroke-linecap: round; }
+      .panel { fill: #f7efe3; stroke: #17231f; stroke-width: 4; rx: 22; }
+      .darkPanel { fill: #152126; stroke: #33463f; stroke-width: 3; rx: 18; }
+      .ink { fill: #f8faf7; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .muted { fill: #aab9b3; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .dark { fill: #111b1f; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .soft { fill: #3f514b; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .title { font-size: 48px; font-weight: 840; }
+      .subtitle { font-size: 23px; font-weight: 560; }
+      .label { font-size: 28px; font-weight: 830; }
+      .small { font-size: 18px; font-weight: 620; }
+      .step { font-size: 20px; font-weight: 780; }
+      .line { stroke: #7f948c; stroke-width: 5; fill: none; stroke-linecap: round; marker-end: url(#arrow); }
+      .boost { stroke: #2ec4a6; stroke-width: 7; fill: none; stroke-linecap: round; marker-end: url(#arrowBoost); }
+      .decay { stroke: #ef476f; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 14 12; marker-end: url(#arrowDecay); }
+      .auto { stroke: #ffd166; stroke-width: 6; fill: none; stroke-linecap: round; stroke-dasharray: 5 11; marker-end: url(#arrowAuto); }
       .node { fill: #2ec4a6; stroke: #0e1418; stroke-width: 4; }
       .node2 { fill: #ffd166; stroke: #0e1418; stroke-width: 4; }
       .node3 { fill: #8ecae6; stroke: #0e1418; stroke-width: 4; }
       .node4 { fill: #ef476f; stroke: #0e1418; stroke-width: 4; }
-      .synapse { stroke: #24342f; stroke-width: 6; fill: none; stroke-linecap: round; }
-      .boost { stroke: #2ec4a6; stroke-width: 8; fill: none; stroke-linecap: round; marker-end: url(#arrow-boost); }
-      .decay { stroke: #ef476f; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 13 12; marker-end: url(#arrow-decay); }
-      .auto { stroke: #ffd166; stroke-width: 6; fill: none; stroke-linecap: round; stroke-dasharray: 4 12; marker-end: url(#arrow-auto); }
-      .ink { fill: #f8faf7; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
-      .dark { fill: #111b1f; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
-      .muted { fill: #aab9b3; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
-      .label { fill: #20342f; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 24px; font-weight: 800; letter-spacing: 0; }
-      .small { fill: #3f514b; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 17px; font-weight: 650; letter-spacing: 0; }
-      .title { font-size: 48px; font-weight: 840; }
-      .subtitle { font-size: 23px; font-weight: 560; }
-      .callout { fill: #152126; stroke: #33463f; stroke-width: 2; rx: 18; }
-      .chip { fill: #f7efe3; stroke: #101820; stroke-width: 3; rx: 14; }
-      .chipText { fill: #111b1f; font-family: Inter, ui-sans-serif, system-ui; font-size: 18px; font-weight: 760; letter-spacing: 0; }
     </style>
-    <marker id="arrow-boost" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#7f948c" />
+    </marker>
+    <marker id="arrowBoost" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L10,4 L0,8 Z" fill="#2ec4a6" />
     </marker>
-    <marker id="arrow-decay" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+    <marker id="arrowDecay" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L10,4 L0,8 Z" fill="#ef476f" />
     </marker>
-    <marker id="arrow-auto" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+    <marker id="arrowAuto" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L10,4 L0,8 Z" fill="#ffd166" />
     </marker>
-    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.35"/>
-    </filter>
   </defs>
 
-  <rect class="bg" width="1400" height="900" />
+  <rect class="bg" width="1400" height="820" />
   <text class="ink title" x="70" y="86">Adaptive Route Memory for Agents</text>
-  <text class="muted subtitle" x="70" y="124">Failure-path weakening, self-correction, success-route reinforcement.</text>
+  <text class="muted subtitle" x="70" y="124">Reinforce successful paths, weaken failed routes, and keep evidence separate from memory.</text>
 
-  <g transform="translate(0 72)">
-  <g filter="url(#softShadow)">
-    <path class="brain" d="M353 449 C294 421 264 367 279 309 C291 260 331 229 382 226 C397 174 444 142 500 149 C530 102 596 88 647 123 C693 84 771 88 814 136 C871 128 928 163 944 219 C1004 229 1049 277 1051 339 C1110 379 1115 465 1062 512 C1071 571 1037 628 982 649 C966 705 903 738 848 717 C804 760 731 760 688 715 C638 749 567 738 531 687 C469 701 412 665 398 607 C342 594 305 547 306 494 C306 475 323 459 353 449 Z" />
-    <path class="lobe" d="M382 267 C433 253 469 275 491 314 C531 272 594 272 629 315 C664 262 744 259 781 314 C824 278 894 291 914 354" />
-    <path class="lobe" d="M345 387 C392 358 448 373 472 421 C527 388 601 402 627 464 C681 412 770 414 810 474 C849 431 934 435 974 489" />
-    <path class="lobe" d="M388 536 C450 526 495 554 515 605 C577 568 652 580 686 641 C732 589 825 584 868 642 C918 610 971 601 1016 626" />
-  </g>
+  <rect class="darkPanel" x="70" y="172" width="1260" height="438" />
 
-  <path class="synapse" d="M448 332 C526 300 602 309 679 364" />
-  <path class="synapse" d="M679 364 C764 342 842 365 910 430" />
-  <path class="synapse" d="M493 533 C591 499 673 520 753 590" />
-  <path class="boost" d="M452 332 C565 258 744 269 910 430" />
-  <path class="decay" d="M918 334 C861 305 808 310 766 347" />
-  <path class="auto" d="M692 660 C731 721 817 755 913 722" />
+  <rect class="panel" x="116" y="230" width="250" height="128" />
+  <text class="dark label" x="146" y="270">Startup Context</text>
+  <text class="soft small" x="146" y="304">read the small index</text>
+  <text class="soft small" x="146" y="330">choose what matters</text>
 
-  <circle class="node" cx="448" cy="332" r="22" />
-  <circle class="node2" cx="679" cy="364" r="22" />
-  <circle class="node3" cx="910" cy="430" r="22" />
-  <circle class="node" cx="493" cy="533" r="22" />
-  <circle class="node2" cx="753" cy="590" r="22" />
-  <circle class="node4" cx="918" cy="334" r="20" />
-  <circle class="node3" cx="913" cy="722" r="20" />
+  <rect class="panel" x="424" y="230" width="250" height="128" />
+  <text class="dark label" x="454" y="270">Route Memory</text>
+  <text class="soft small" x="454" y="304">retrieve proven paths</text>
+  <text class="soft small" x="454" y="330">avoid broad search</text>
 
-  <rect class="chip" x="306" y="188" width="220" height="70" />
-  <text class="label" x="330" y="219">Evidence Layers</text>
-  <text class="small" x="330" y="244">memory is not proof</text>
+  <rect class="panel" x="732" y="230" width="250" height="128" />
+  <text class="dark label" x="762" y="270">Evidence Check</text>
+  <text class="soft small" x="762" y="304">source, runtime, data</text>
+  <text class="soft small" x="762" y="330">stay separate</text>
 
-  <rect class="chip" x="565" y="210" width="228" height="70" />
-  <text class="label" x="589" y="241">Route Memory</text>
-  <text class="small" x="589" y="266">retrieve proven paths</text>
+  <rect class="panel" x="1040" y="230" width="250" height="128" />
+  <text class="dark label" x="1070" y="270">Deliver First</text>
+  <text class="soft small" x="1070" y="304">visible answer before</text>
+  <text class="soft small" x="1070" y="330">memory capture</text>
 
-  <rect class="chip" x="855" y="206" width="242" height="74" />
-  <text class="label" x="879" y="237">Reinforce Success</text>
-  <text class="small" x="879" y="262">verified paths get stronger</text>
+  <path class="line" d="M366 294 H424" />
+  <path class="boost" d="M674 294 H732" />
+  <path class="line" d="M982 294 H1040" />
 
-  <rect class="chip" x="880" y="512" width="242" height="74" />
-  <text class="label" x="904" y="543">Weaken Failures</text>
-  <text class="small" x="904" y="568">bad paths decay or suppress</text>
+  <circle class="node" cx="394" cy="294" r="18" />
+  <circle class="node2" cx="704" cy="294" r="18" />
+  <circle class="node3" cx="1012" cy="294" r="18" />
 
-  <rect class="chip" x="333" y="624" width="250" height="74" />
-  <text class="label" x="357" y="655">Weekly Consolidation</text>
-  <text class="small" x="357" y="680">auto-triggered maintenance</text>
+  <rect class="panel" x="192" y="426" width="292" height="116" />
+  <text class="dark label" x="222" y="466">Reinforce Success</text>
+  <text class="soft small" x="222" y="500">verified paths get stronger</text>
 
-  <rect class="chip" x="624" y="698" width="270" height="74" />
-  <text class="label" x="648" y="729">Adaptive Tool Choice</text>
-  <text class="small" x="648" y="754">capability routing learns</text>
+  <rect class="panel" x="554" y="426" width="292" height="116" />
+  <text class="dark label" x="584" y="466">Weaken Failures</text>
+  <text class="soft small" x="584" y="500">bad routes decay or suppress</text>
 
-  </g>
+  <rect class="panel" x="916" y="426" width="292" height="116" />
+  <text class="dark label" x="946" y="466">Consolidate</text>
+  <text class="soft small" x="946" y="500">weekly maintenance reports</text>
 
-  <rect class="callout" x="70" y="860" width="1260" height="92" />
-  <text class="ink" x="100" y="891" font-size="23" font-weight="760">Human-memory design: reinforce, inhibit, retrieve, consolidate, adapt.</text>
-  <text class="muted" x="100" y="919" font-size="18" font-weight="560">Associations strengthen with use, unused paths decay, and verified experience</text>
-  <text class="muted" x="100" y="945" font-size="18" font-weight="560">becomes future routing intelligence.</text>
+  <path class="boost" d="M1165 358 C1120 394 1070 414 1025 426" />
+  <path class="decay" d="M857 358 C812 394 760 416 700 426" />
+  <path class="auto" d="M338 542 C440 590 760 610 1062 542" />
+
+  <circle class="node" cx="338" cy="542" r="18" />
+  <circle class="node4" cx="700" cy="426" r="18" />
+  <circle class="node3" cx="1062" cy="542" r="18" />
+
+  <rect class="darkPanel" x="70" y="652" width="1260" height="104" />
+  <text class="ink step" x="104" y="692">Human-memory design: retrieve, verify, reinforce, inhibit, consolidate.</text>
+  <text class="muted small" x="104" y="724">The agent learns which path to try next, while proof remains anchored in files, commands, data, and user-visible results.</text>
 </svg>
