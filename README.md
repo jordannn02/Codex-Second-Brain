@@ -40,9 +40,9 @@ The goal is not to ship a huge memory platform in one step. The goal is to make 
 
 ## Visual Overview
 
-![Human-memory-inspired agent memory loop](assets/homepage-system-flow.svg)
+![Human-memory-inspired agent memory loop](assets/homepage-system-flow.png)
 
-![Redacted demo vault example](assets/homepage-demo-vault.svg)
+![Redacted demo vault example](assets/homepage-demo-vault.png)
 
 ## Quick Start
 

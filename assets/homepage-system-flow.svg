@@ -1,98 +1,80 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
   <title id="title">Adaptive route memory for agents</title>
-  <desc id="desc">A stable GitHub README diagram showing startup context, route memory, evidence checks, delivery, capture, and consolidation.</desc>
+  <desc id="desc">A clean GitHub README diagram showing startup context, route memory, evidence checks, delivery, and feedback learning without overlapping labels.</desc>
   <defs>
     <style>
       .bg { fill: #0e1418; }
-      .panel { fill: #f7efe3; stroke: #17231f; stroke-width: 4; rx: 22; }
-      .darkPanel { fill: #152126; stroke: #33463f; stroke-width: 3; rx: 18; }
+      .lane { fill: #152126; stroke: #33463f; stroke-width: 3; rx: 20; }
+      .card { fill: #f7efe3; stroke: #17231f; stroke-width: 3; rx: 16; }
       .ink { fill: #f8faf7; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
       .muted { fill: #aab9b3; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
       .dark { fill: #111b1f; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
-      .soft { fill: #3f514b; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
-      .title { font-size: 48px; font-weight: 840; }
-      .subtitle { font-size: 23px; font-weight: 560; }
-      .label { font-size: 28px; font-weight: 830; }
-      .small { font-size: 18px; font-weight: 620; }
-      .step { font-size: 20px; font-weight: 780; }
-      .line { stroke: #7f948c; stroke-width: 5; fill: none; stroke-linecap: round; marker-end: url(#arrow); }
-      .boost { stroke: #2ec4a6; stroke-width: 7; fill: none; stroke-linecap: round; marker-end: url(#arrowBoost); }
-      .decay { stroke: #ef476f; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 14 12; marker-end: url(#arrowDecay); }
-      .auto { stroke: #ffd166; stroke-width: 6; fill: none; stroke-linecap: round; stroke-dasharray: 5 11; marker-end: url(#arrowAuto); }
-      .node { fill: #2ec4a6; stroke: #0e1418; stroke-width: 4; }
-      .node2 { fill: #ffd166; stroke: #0e1418; stroke-width: 4; }
-      .node3 { fill: #8ecae6; stroke: #0e1418; stroke-width: 4; }
-      .node4 { fill: #ef476f; stroke: #0e1418; stroke-width: 4; }
+      .soft { fill: #41534d; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: 0; }
+      .title { font-size: 46px; font-weight: 820; }
+      .subtitle { font-size: 22px; font-weight: 560; }
+      .label { font-size: 25px; font-weight: 780; }
+      .small { font-size: 17px; font-weight: 610; }
+      .caption { font-size: 19px; font-weight: 720; }
+      .line { stroke: #7f948c; stroke-width: 4; fill: none; stroke-linecap: round; }
+      .learn { stroke: #ffd166; stroke-width: 6; fill: none; stroke-linecap: round; stroke-dasharray: 3 16; }
+      .dotA { fill: #2ec4a6; }
+      .dotB { fill: #ffd166; }
+      .dotC { fill: #8ecae6; }
+      .dotD { fill: #ef476f; }
     </style>
-    <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L10,4 L0,8 Z" fill="#7f948c" />
-    </marker>
-    <marker id="arrowBoost" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L10,4 L0,8 Z" fill="#2ec4a6" />
-    </marker>
-    <marker id="arrowDecay" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L10,4 L0,8 Z" fill="#ef476f" />
-    </marker>
-    <marker id="arrowAuto" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L10,4 L0,8 Z" fill="#ffd166" />
-    </marker>
   </defs>
 
-  <rect class="bg" width="1400" height="820" />
-  <text class="ink title" x="70" y="86">Adaptive Route Memory for Agents</text>
-  <text class="muted subtitle" x="70" y="124">Reinforce successful paths, weaken failed routes, and keep evidence separate from memory.</text>
+  <rect class="bg" width="1400" height="760" />
+  <text class="ink title" x="70" y="78">Adaptive Route Memory for Agents</text>
+  <text class="muted subtitle" x="70" y="116">The agent retrieves a proven path, verifies evidence, delivers first, then learns from the outcome.</text>
 
-  <rect class="darkPanel" x="70" y="172" width="1260" height="438" />
+  <rect class="lane" x="70" y="158" width="1260" height="388" />
 
-  <rect class="panel" x="116" y="230" width="250" height="128" />
-  <text class="dark label" x="146" y="270">Startup Context</text>
-  <text class="soft small" x="146" y="304">read the small index</text>
-  <text class="soft small" x="146" y="330">choose what matters</text>
+  <rect class="card" x="104" y="218" width="260" height="118" />
+  <text class="dark label" x="128" y="256">Startup Context</text>
+  <text class="soft small" x="128" y="288">small index</text>
+  <text class="soft small" x="128" y="314">task scope</text>
 
-  <rect class="panel" x="424" y="230" width="250" height="128" />
-  <text class="dark label" x="454" y="270">Route Memory</text>
-  <text class="soft small" x="454" y="304">retrieve proven paths</text>
-  <text class="soft small" x="454" y="330">avoid broad search</text>
+  <rect class="card" x="404" y="218" width="260" height="118" />
+  <text class="dark label" x="428" y="256">Route Memory</text>
+  <text class="soft small" x="428" y="288">proven paths</text>
+  <text class="soft small" x="428" y="314">avoid repeats</text>
 
-  <rect class="panel" x="732" y="230" width="250" height="128" />
-  <text class="dark label" x="762" y="270">Evidence Check</text>
-  <text class="soft small" x="762" y="304">source, runtime, data</text>
-  <text class="soft small" x="762" y="330">stay separate</text>
+  <rect class="card" x="704" y="218" width="260" height="118" />
+  <text class="dark label" x="728" y="256">Evidence Check</text>
+  <text class="soft small" x="728" y="288">sources + data</text>
+  <text class="soft small" x="728" y="314">runtime proof</text>
 
-  <rect class="panel" x="1040" y="230" width="250" height="128" />
-  <text class="dark label" x="1070" y="270">Deliver First</text>
-  <text class="soft small" x="1070" y="304">visible answer before</text>
-  <text class="soft small" x="1070" y="330">memory capture</text>
+  <rect class="card" x="1004" y="218" width="260" height="118" />
+  <text class="dark label" x="1028" y="256">Deliver First</text>
+  <text class="soft small" x="1028" y="288">answer first</text>
+  <text class="soft small" x="1028" y="314">then capture</text>
 
-  <path class="line" d="M366 294 H424" />
-  <path class="boost" d="M674 294 H732" />
-  <path class="line" d="M982 294 H1040" />
+  <path class="line" d="M364 277 H404" />
+  <path class="line" d="M664 277 H704" />
+  <path class="line" d="M964 277 H1004" />
+  <circle class="dotA" cx="384" cy="277" r="8" />
+  <circle class="dotB" cx="684" cy="277" r="8" />
+  <circle class="dotC" cx="984" cy="277" r="8" />
 
-  <circle class="node" cx="394" cy="294" r="18" />
-  <circle class="node2" cx="704" cy="294" r="18" />
-  <circle class="node3" cx="1012" cy="294" r="18" />
+  <rect class="card" x="172" y="404" width="304" height="102" />
+  <text class="dark label" x="198" y="442">Reinforce</text>
+  <text class="soft small" x="198" y="474">successful routes get stronger</text>
 
-  <rect class="panel" x="192" y="426" width="292" height="116" />
-  <text class="dark label" x="222" y="466">Reinforce Success</text>
-  <text class="soft small" x="222" y="500">verified paths get stronger</text>
+  <rect class="card" x="548" y="404" width="304" height="102" />
+  <text class="dark label" x="574" y="442">Weaken</text>
+  <text class="soft small" x="574" y="474">failed routes lose weight</text>
 
-  <rect class="panel" x="554" y="426" width="292" height="116" />
-  <text class="dark label" x="584" y="466">Weaken Failures</text>
-  <text class="soft small" x="584" y="500">bad routes decay or suppress</text>
+  <rect class="card" x="924" y="404" width="304" height="102" />
+  <text class="dark label" x="950" y="442">Consolidate</text>
+  <text class="soft small" x="950" y="474">maintenance reports changes</text>
 
-  <rect class="panel" x="916" y="426" width="292" height="116" />
-  <text class="dark label" x="946" y="466">Consolidate</text>
-  <text class="soft small" x="946" y="500">weekly maintenance reports</text>
+  <path class="learn" d="M324 520 C474 572 920 572 1076 520" />
+  <circle class="dotA" cx="324" cy="520" r="12" />
+  <circle class="dotD" cx="700" cy="548" r="12" />
+  <circle class="dotC" cx="1076" cy="520" r="12" />
 
-  <path class="boost" d="M1165 358 C1120 394 1070 414 1025 426" />
-  <path class="decay" d="M857 358 C812 394 760 416 700 426" />
-  <path class="auto" d="M338 542 C440 590 760 610 1062 542" />
-
-  <circle class="node" cx="338" cy="542" r="18" />
-  <circle class="node4" cx="700" cy="426" r="18" />
-  <circle class="node3" cx="1062" cy="542" r="18" />
-
-  <rect class="darkPanel" x="70" y="652" width="1260" height="104" />
-  <text class="ink step" x="104" y="692">Human-memory design: retrieve, verify, reinforce, inhibit, consolidate.</text>
-  <text class="muted small" x="104" y="724">The agent learns which path to try next, while proof remains anchored in files, commands, data, and user-visible results.</text>
+  <rect class="lane" x="70" y="600" width="1260" height="92" />
+  <text class="ink caption" x="104" y="636">Human-memory loop: retrieve, verify, deliver, capture, reinforce, inhibit, consolidate.</text>
+  <text class="muted small" x="104" y="666">Memory suggests the route; evidence still comes from files, commands, data, and user-visible results.</text>
 </svg>
