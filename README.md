@@ -35,6 +35,7 @@ This repository is an alpha reference implementation. It includes:
 - tests over the demo vault;
 - a `momo-tools` integration fixture;
 - public safety and licensing files.
+- atomic JSONL persistence for capture and route-memory writes.
 
 The goal is not to ship a huge memory platform in one step. The goal is to make the method inspectable, forkable, and testable.
 
@@ -228,6 +229,10 @@ Publish the operating system, not the private memory.
 This public repository should contain methods, schemas, docs, and synthetic fixtures only. Do not publish raw transcripts, credentials, financial records, private notes, internal customer data, production identifiers, or private vault exports.
 
 See [SECURITY.md](SECURITY.md).
+
+## Health Hardening
+
+Version 0.4 adds operational hardening learned from a real vault maintenance pass, without publishing any private vault data. JSONL capture and memory-graph updates now use `fsync` plus atomic replacement, so an interrupted write leaves either the old complete file or the new complete file. The companion design note covers scoped health checks, bounded capture, privacy gates, and snapshot/restore verification: [docs/health-hardening.md](docs/health-hardening.md).
 
 ## Roadmap and Contributions
 

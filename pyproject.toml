@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "codex-second-brain"
-version = "0.3.0"
+version = "0.4.0"
 description = "Adaptive route memory and dry-run-first second-brain workflows for AI agents."
 readme = "README.md"
 requires-python = ">=3.10"

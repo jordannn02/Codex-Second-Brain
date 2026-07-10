@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
+import tempfile
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -71,14 +73,32 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 def write_jsonl_append(path: Path, item: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n")
+    existing = path.read_text(encoding="utf-8") if path.exists() else ""
+    write_jsonl_atomic(path, existing + json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n")
 
 
 def write_jsonl_replace(path: Path, items: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = "".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in items)
-    path.write_text(text, encoding="utf-8")
+    write_jsonl_atomic(path, text)
+
+
+def write_jsonl_atomic(path: Path, text: str) -> None:
+    """Persist the complete JSONL view or leave the previous view intact."""
+    with tempfile.NamedTemporaryFile(dir=path.parent, prefix=path.name + ".", delete=False) as handle:
+        handle.write(text.encode("utf-8"))
+        handle.flush()
+        os.fsync(handle.fileno())
+        temporary_path = Path(handle.name)
+    try:
+        os.replace(temporary_path, path)
+        directory_fd = os.open(path.parent, os.O_DIRECTORY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    finally:
+        temporary_path.unlink(missing_ok=True)
 
 
 def print_json(payload: dict[str, Any]) -> None:
