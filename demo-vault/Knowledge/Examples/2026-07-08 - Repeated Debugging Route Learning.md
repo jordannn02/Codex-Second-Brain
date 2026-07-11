@@ -9,6 +9,9 @@ tags:
 ai-first: true
 source: "Synthetic public demo fixture."
 confidence: example
+aliases:
+  - 重複除錯路徑學習
+  - 雜訊搜尋後的圖譜優先除錯
 ---
 
 # Repeated Debugging Route Learning

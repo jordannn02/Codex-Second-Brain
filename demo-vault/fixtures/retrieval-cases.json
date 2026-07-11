@@ -1,0 +1,29 @@
+{
+  "schema": "second-brain-retrieval-cases/v1",
+  "cases": [
+    {
+      "query": "debugging noisy broad search call trace",
+      "expected": "Knowledge/Examples/2026-07-08 - Repeated Debugging Route Learning.md"
+    },
+    {
+      "query": "雜訊搜尋 圖譜優先 除錯",
+      "expected": "Knowledge/Examples/2026-07-08 - Repeated Debugging Route Learning.md"
+    },
+    {
+      "query": "meeting decision owner due date execution",
+      "expected": "Knowledge/Examples/2026-07-08 - Meeting to Execution Memory.md"
+    },
+    {
+      "query": "會議轉執行記憶",
+      "expected": "Knowledge/Examples/2026-07-08 - Meeting to Execution Memory.md"
+    },
+    {
+      "query": "capability router many tools task shape",
+      "expected": "Knowledge/Examples/2026-07-08 - Tool Overload Auto Router.md"
+    },
+    {
+      "query": "工具過載自動路由",
+      "expected": "Knowledge/Examples/2026-07-08 - Tool Overload Auto Router.md"
+    }
+  ]
+}
