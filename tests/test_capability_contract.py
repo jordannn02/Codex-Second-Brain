@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-import tomllib
+import re
 import unittest
 from pathlib import Path
 
@@ -14,7 +14,10 @@ ROOT = Path(__file__).resolve().parents[1]
 class CapabilityContractTests(unittest.TestCase):
     def test_public_claims_match_package_version_and_artifacts(self) -> None:
         contract = json.loads((ROOT / "capability-contract.json").read_text(encoding="utf-8"))
-        version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+        pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        match = re.search(r'^version\s*=\s*"([^"]+)"', pyproject, re.MULTILINE)
+        self.assertIsNotNone(match)
+        version = match.group(1)
         self.assertEqual(contract["surfaces"]["public-package"]["version"], version)
         self.assertEqual(__version__, version)
         for capability, matrix in contract["capabilities"].items():
