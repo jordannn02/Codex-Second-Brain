@@ -9,6 +9,8 @@ tags:
 ai-first: true
 source: "Synthetic public demo fixture."
 confidence: example
+aliases:
+  - 工具過載自動路由
 ---
 
 # Tool Overload Auto Router

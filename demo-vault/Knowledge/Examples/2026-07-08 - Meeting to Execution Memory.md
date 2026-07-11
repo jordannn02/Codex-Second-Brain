@@ -9,6 +9,8 @@ tags:
 ai-first: true
 source: "Synthetic public demo fixture."
 confidence: example
+aliases:
+  - 會議轉執行記憶
 ---
 
 # Meeting to Execution Memory

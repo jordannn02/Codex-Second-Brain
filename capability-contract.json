@@ -1,0 +1,69 @@
+{
+  "schema": "second-brain-capability-contract/v1",
+  "contract_version": "2026.07.11.1",
+  "semantics": {
+    "verified-working": "Executable artifact exists and is covered by the current surface test contract.",
+    "visible": "Artifact exists, but this matrix does not claim parity with the vault-local implementation.",
+    "reference-only": "The surface documents or demonstrates the idea but does not expose the vault-local runtime.",
+    "not-shipped": "The capability is intentionally absent; consumers must not route to it on this surface."
+  },
+  "surfaces": {
+    "vault-local": {
+      "version": "2026.07.11",
+      "version_source": ".codex/VERSION",
+      "contract_path": ".codex/capability-contract.json"
+    },
+    "installed-skill": {
+      "version": "0.10.0",
+      "version_source": "pyproject.toml",
+      "contract_path": "capability-contract.json"
+    },
+    "public-package": {
+      "version": "0.5.0",
+      "version_source": "pyproject.toml",
+      "contract_path": "capability-contract.json"
+    }
+  },
+  "capabilities": {
+    "canonical-health": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/vault_health.py"},
+      "installed-skill": {"state": "visible", "artifact": "scripts/vault_health.py"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    },
+    "fail-closed-capture": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/capture_gate.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    },
+    "rank-aware-retrieval": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/retrieval_benchmark.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    },
+    "content-aware-status": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/vault_status_watchdog.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    },
+    "external-state-backup": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/vault_backup_restore.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    },
+    "atomic-memory-graph": {
+      "vault-local": {"state": "verified-working", "artifact": "Knowledge/Codex/memory_graph/memory_graph_cli.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/cli.py"}
+    },
+    "secret-content-gate": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/privacy_gate.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    },
+    "retention-slo-audit": {
+      "vault-local": {"state": "verified-working", "artifact": ".codex/scripts/retention_audit.py"},
+      "installed-skill": {"state": "not-shipped"},
+      "public-package": {"state": "verified-working", "artifact": "codex_second_brain/hardening.py"}
+    }
+  }
+}
