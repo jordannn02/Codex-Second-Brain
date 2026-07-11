@@ -34,8 +34,11 @@ This repository is an alpha reference implementation. It includes:
 - dry-run consolidation reports;
 - tests over the demo vault;
 - a `momo-tools` integration fixture;
-- public safety and licensing files.
+- public safety and licensing files;
 - atomic JSONL persistence for capture and route-memory writes.
+- fail-closed capture planning and content-aware status manifests;
+- rank-aware retrieval benchmarks with bilingual synthetic cases;
+- isolated backup/restore verification, privacy scanning, and retention audits.
 
 The goal is not to ship a huge memory platform in one step. The goal is to make the method inspectable, forkable, and testable.
 
@@ -53,6 +56,9 @@ Run the reference CLI from the repository root:
 python3 -m codex_second_brain.cli validate demo-vault
 python3 -m codex_second_brain.cli consolidate demo-vault --dry-run
 python3 -m codex_second_brain.cli route-suggest demo-vault "debugging noisy search source trace"
+python3 -m codex_second_brain.cli health demo-vault --today 2026-07-11
+python3 -m codex_second_brain.cli retrieval-benchmark demo-vault \
+  --cases demo-vault/fixtures/retrieval-cases.json
 ```
 
 Create a new minimal vault skeleton:
@@ -123,13 +129,15 @@ The agent should not read the entire vault before every task.
 ```text
 .
 ├── README.md
+├── CHANGELOG.md
 ├── LICENSE
 ├── SECURITY.md
 ├── CONTRIBUTING.md
 ├── ROADMAP.md
 ├── pyproject.toml
 ├── codex_second_brain/
-│   └── cli.py
+│   ├── cli.py
+│   └── hardening.py
 ├── schemas/
 │   ├── memory-edge.schema.json
 │   ├── capture-event.schema.json
@@ -168,7 +176,7 @@ See [docs/schemas.md](docs/schemas.md).
 
 ## Minimal CLI
 
-The reference CLI is deliberately small and keeps schema validation explicit.
+The reference CLI keeps safety boundaries and schema validation explicit.
 
 | Command | Purpose |
 |---|---|
@@ -182,6 +190,15 @@ The reference CLI is deliberately small and keeps schema validation explicit.
 | `second-brain decay <vault>` | Lower old unused edge weights so stale memory stops dominating. |
 | `second-brain explain-edge <vault> <edge-id>` | Explain why a route memory edge would be selected. |
 | `second-brain ingest-momo-route <vault> <json>` | Convert a momo-tools route result into a capture event and memory edge update. |
+| `second-brain health <vault>` | Check every unchecked dated task and report exact path, line, and due date. |
+| `second-brain capture-gate <vault> ...` | Enforce delivery-first target budgets and return non-zero on denial. |
+| `second-brain retrieval-benchmark <vault> --cases ...` | Measure Top-1, Top-3, MRR, and P95 latency. |
+| `second-brain status-build/status-watch ...` | Fingerprint corpus, case, and policy inputs; block stale or expired status. |
+| `second-brain index-check <vault>` | Compare the compact index stats marker with current vault facts. |
+| `second-brain privacy-scan <path...>` | Scan file contents for high-confidence credential material. |
+| `second-brain automation-ledger-check <jsonl>` | Keep manual and genuine scheduled-run evidence separate. |
+| `second-brain backup-create/backup-verify ...` | Snapshot approved local/external state and verify an isolated restore. |
+| `second-brain retention-audit ...` | Audit backup, status, and scheduled-run freshness independently. |
 
 After installation, the console script is available as `second-brain`. During development, use:
 
@@ -232,7 +249,9 @@ See [SECURITY.md](SECURITY.md).
 
 ## Health Hardening
 
-Version 0.4 adds operational hardening learned from a real vault maintenance pass, without publishing any private vault data. JSONL capture and memory-graph updates now use `fsync` plus atomic replacement, so an interrupted write leaves either the old complete file or the new complete file. The companion design note covers scoped health checks, bounded capture, privacy gates, and snapshot/restore verification: [docs/health-hardening.md](docs/health-hardening.md).
+Version 0.5 turns the public-safe hardening design into executable code. JSONL appends are process-locked and atomically replaced; memory-graph commands hold one transaction lock across load, mutation, validation, and save. Health, capture gating, retrieval metrics, status fingerprints, index freshness, privacy scanning, automation provenance, snapshot/restore verification, and retention checks are covered by synthetic tests.
+
+This verifies the mechanisms in this repository. It does **not** claim that a user's private vault, external automation, or first real scheduled run has been verified. See [docs/health-hardening.md](docs/health-hardening.md) and [capability-contract.json](capability-contract.json).
 
 ## Roadmap and Contributions
 

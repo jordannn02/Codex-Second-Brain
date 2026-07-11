@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 
@@ -245,3 +246,71 @@ class CliTests(unittest.TestCase):
         payload = json.loads(result.stdout)
         self.assertFalse(payload["ok"])
         self.assertTrue(any("schema" in error for error in payload["errors"]))
+
+    def test_concurrent_record_outcomes_do_not_lose_updates(self) -> None:
+        tmp, vault = self.copy_demo_vault()
+        self.addCleanup(tmp.cleanup)
+
+        def record(index: int) -> subprocess.CompletedProcess[str]:
+            return self.run_cli(
+                "record-outcome",
+                str(vault),
+                "--edge-id",
+                "edge_tool_overload_use_capability_router",
+                "--outcome",
+                "success",
+                "--evidence",
+                f"tests/evidence/concurrent-{index}.md",
+                "--write",
+            )
+
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            results = list(executor.map(record, range(8)))
+
+        self.assertTrue(all(result.returncode == 0 for result in results))
+        stored = [
+            json.loads(line)
+            for line in (vault / "memory-graph.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        edge = next(
+            row
+            for row in stored
+            if row["id"] == "edge_tool_overload_use_capability_router"
+        )
+        self.assertEqual(edge["success_count"], 10)
+        for index in range(8):
+            self.assertIn(f"tests/evidence/concurrent-{index}.md", edge["evidence"])
+
+    def test_concurrent_capture_appends_do_not_lose_rows(self) -> None:
+        tmp, vault = self.copy_demo_vault()
+        self.addCleanup(tmp.cleanup)
+
+        def capture(index: int) -> subprocess.CompletedProcess[str]:
+            return self.run_cli(
+                "capture",
+                "--vault",
+                str(vault),
+                "--type",
+                "deliverable",
+                "--summary",
+                f"Concurrent capture {index}",
+                "--write",
+            )
+
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            results = list(executor.map(capture, range(8)))
+
+        self.assertTrue(all(result.returncode == 0 for result in results))
+        rows = [
+            json.loads(line)
+            for line in (vault / "captures.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        self.assertEqual(len(rows), 8)
+
+    def test_privacy_scan_fails_closed_for_missing_target(self) -> None:
+        result = self.run_cli("privacy-scan", "does-not-exist")
+
+        self.assertEqual(result.returncode, 2)
+        payload = json.loads(result.stdout)
+        self.assertFalse(payload["ok"])
+        self.assertIn("target does not exist", payload["errors"][0])

@@ -1,17 +1,30 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
 import sys
+import tarfile
 import tempfile
+from contextlib import contextmanager
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
-from . import __version__
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - exercised on Windows.
+    fcntl = None
+
+try:
+    import msvcrt
+except ImportError:  # pragma: no cover - exercised on POSIX.
+    msvcrt = None
+
+from . import __version__, hardening
 
 
 REQUIRED_STARTUP_FILES = ["_CLAUDE.md", "index.md", "Home.md", "CRITICAL_FACTS.md"]
@@ -71,16 +84,49 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def lock_path_for(path: Path, purpose: str = "write") -> Path:
+    digest = hashlib.sha256(str(path.resolve()).encode("utf-8")).hexdigest()
+    return Path(tempfile.gettempdir()) / "codex-second-brain-locks" / f"{digest}.{purpose}.lock"
+
+
+@contextmanager
+def exclusive_file_lock(path: Path, purpose: str = "write") -> Iterator[None]:
+    """Serialize local processes without adding lock artifacts to the vault."""
+
+    lock_path = lock_path_for(path, purpose)
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with lock_path.open("a+b") as handle:
+        if fcntl is not None:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        elif msvcrt is not None:  # pragma: no cover - exercised on Windows.
+            handle.seek(0)
+            if not handle.read(1):
+                handle.write(b"0")
+                handle.flush()
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+        try:
+            yield
+        finally:
+            if fcntl is not None:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+            elif msvcrt is not None:  # pragma: no cover - exercised on Windows.
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+
+
 def write_jsonl_append(path: Path, item: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    existing = path.read_text(encoding="utf-8") if path.exists() else ""
-    write_jsonl_atomic(path, existing + json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n")
+    with exclusive_file_lock(path):
+        existing = path.read_text(encoding="utf-8") if path.exists() else ""
+        write_jsonl_atomic(path, existing + json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n")
 
 
 def write_jsonl_replace(path: Path, items: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = "".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in items)
-    write_jsonl_atomic(path, text)
+    with exclusive_file_lock(path):
+        write_jsonl_atomic(path, text)
 
 
 def write_jsonl_atomic(path: Path, text: str) -> None:
@@ -92,11 +138,15 @@ def write_jsonl_atomic(path: Path, text: str) -> None:
         temporary_path = Path(handle.name)
     try:
         os.replace(temporary_path, path)
-        directory_fd = os.open(path.parent, os.O_DIRECTORY)
         try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+            directory_fd = os.open(path.parent, os.O_DIRECTORY)
+        except (AttributeError, OSError):
+            directory_fd = None
+        if directory_fd is not None:
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
     finally:
         temporary_path.unlink(missing_ok=True)
 
@@ -528,6 +578,18 @@ def write_memory_graph(vault: Path, edges: list[dict[str, Any]]) -> None:
     write_jsonl_replace(vault / "memory-graph.jsonl", edges)
 
 
+@contextmanager
+def memory_graph_transaction(vault: Path, write: bool) -> Iterator[list[dict[str, Any]]]:
+    """Hold one lock across memory-graph load, mutation, validation, and save."""
+
+    graph_path = vault / "memory-graph.jsonl"
+    if write:
+        with exclusive_file_lock(graph_path, purpose="transaction"):
+            yield load_edges_for_route(vault)
+    else:
+        yield load_edges_for_route(vault)
+
+
 def find_edge(edges: list[dict[str, Any]], edge_id: str) -> dict[str, Any] | None:
     for edge in edges:
         if edge.get("id") == edge_id:
@@ -647,70 +709,70 @@ def validate_memory_edge_or_error(edge: dict[str, Any]) -> list[str]:
 
 def command_record_outcome(args: argparse.Namespace) -> int:
     vault = Path(args.vault).expanduser().resolve()
-    edges = load_edges_for_route(vault)
-    edge = find_edge(edges, args.edge_id)
-    if edge is None:
-        missing = require_edge_inputs(args)
-        if missing:
-            print_json({"ok": False, "errors": [f"new edge requires {', '.join(missing)}"]})
-            return 2
-        edge = base_edge(args.edge_id, args.from_text, args.to_text, args.relation, args.action, args.evidence)
-        edges.append(edge)
+    with memory_graph_transaction(vault, args.write) as edges:
+        edge = find_edge(edges, args.edge_id)
+        if edge is None:
+            missing = require_edge_inputs(args)
+            if missing:
+                print_json({"ok": False, "errors": [f"new edge requires {', '.join(missing)}"]})
+                return 2
+            edge = base_edge(args.edge_id, args.from_text, args.to_text, args.relation, args.action, args.evidence)
+            edges.append(edge)
 
-    updated = apply_outcome(edge, args.outcome, args.evidence, args.failure_signature)
-    errors = validate_memory_edge_or_error(updated)
-    if errors:
-        print_json({"ok": False, "errors": errors})
-        return 1
+        updated = apply_outcome(edge, args.outcome, args.evidence, args.failure_signature)
+        errors = validate_memory_edge_or_error(updated)
+        if errors:
+            print_json({"ok": False, "errors": errors})
+            return 1
 
-    for index, existing in enumerate(edges):
-        if existing.get("id") == args.edge_id:
-            edges[index] = updated
-            break
-    if args.write:
-        write_memory_graph(vault, edges)
+        for index, existing in enumerate(edges):
+            if existing.get("id") == args.edge_id:
+                edges[index] = updated
+                break
+        if args.write:
+            write_memory_graph(vault, edges)
     print_json({"ok": True, "written": bool(args.write), "outcome": args.outcome, "edge": updated})
     return 0
 
 
 def command_self_correct(args: argparse.Namespace) -> int:
     vault = Path(args.vault).expanduser().resolve()
-    edges = load_edges_for_route(vault)
-    failed = find_edge(edges, args.failed_edge_id)
-    if failed is None:
-        print_json({"ok": False, "errors": [f"failed edge not found: {args.failed_edge_id}"]})
-        return 2
+    with memory_graph_transaction(vault, args.write) as edges:
+        failed = find_edge(edges, args.failed_edge_id)
+        if failed is None:
+            print_json({"ok": False, "errors": [f"failed edge not found: {args.failed_edge_id}"]})
+            return 2
 
-    corrected = find_edge(edges, args.corrected_edge_id)
-    if corrected is None:
-        corrected = base_edge(
-            args.corrected_edge_id,
-            args.from_text,
-            args.to_text,
-            "preferred_tool_for",
-            args.action,
-            args.evidence,
-            weight=0.65,
-        )
-        edges.append(corrected)
+        corrected = find_edge(edges, args.corrected_edge_id)
+        if corrected is None:
+            corrected = base_edge(
+                args.corrected_edge_id,
+                args.from_text,
+                args.to_text,
+                "preferred_tool_for",
+                args.action,
+                args.evidence,
+                weight=0.65,
+            )
+            edges.append(corrected)
 
-    failed_updated = suppress_edge(failed, args.evidence, args.failure_signature)
-    corrected_updated = apply_outcome(corrected, "success", args.evidence)
-    corrected_updated["relation"] = "preferred_tool_for"
-    corrected_updated["confidence"] = "verified-by-use"
+        failed_updated = suppress_edge(failed, args.evidence, args.failure_signature)
+        corrected_updated = apply_outcome(corrected, "success", args.evidence)
+        corrected_updated["relation"] = "preferred_tool_for"
+        corrected_updated["confidence"] = "verified-by-use"
 
-    errors = validate_memory_edge_or_error(failed_updated) + validate_memory_edge_or_error(corrected_updated)
-    if errors:
-        print_json({"ok": False, "errors": errors})
-        return 1
+        errors = validate_memory_edge_or_error(failed_updated) + validate_memory_edge_or_error(corrected_updated)
+        if errors:
+            print_json({"ok": False, "errors": errors})
+            return 1
 
-    for index, existing in enumerate(edges):
-        if existing.get("id") == args.failed_edge_id:
-            edges[index] = failed_updated
-        if existing.get("id") == args.corrected_edge_id:
-            edges[index] = corrected_updated
-    if args.write:
-        write_memory_graph(vault, edges)
+        for index, existing in enumerate(edges):
+            if existing.get("id") == args.failed_edge_id:
+                edges[index] = failed_updated
+            if existing.get("id") == args.corrected_edge_id:
+                edges[index] = corrected_updated
+        if args.write:
+            write_memory_graph(vault, edges)
     print_json(
         {
             "ok": True,
@@ -725,42 +787,41 @@ def command_self_correct(args: argparse.Namespace) -> int:
 def command_decay(args: argparse.Namespace) -> int:
     vault = Path(args.vault).expanduser().resolve()
     now = parse_datetime(args.now) if args.now else datetime.now(timezone.utc)
-    edges = load_edges_for_route(vault)
     proposed_changes: list[dict[str, Any]] = []
+    with memory_graph_transaction(vault, args.write) as edges:
+        for index, edge in enumerate(edges):
+            last_used = edge.get("last_used")
+            if not last_used:
+                continue
+            try:
+                age_days = (now - parse_datetime(str(last_used))).days
+            except ValueError:
+                continue
+            if age_days < args.days_unused:
+                continue
+            before_weight = float(edge.get("weight", 0))
+            after_weight = round(max(0.0, before_weight - args.amount), 3)
+            after_state = decay_state_for_weight(after_weight)
+            change = {
+                "id": edge.get("id"),
+                "days_unused": age_days,
+                "before_weight": round(before_weight, 3),
+                "after_weight": after_weight,
+                "before_state": edge.get("decay_state"),
+                "after_state": after_state,
+            }
+            proposed_changes.append(change)
+            if args.write:
+                updated = deepcopy(edge)
+                updated["weight"] = after_weight
+                updated["decay_state"] = after_state
+                updated["confidence"] = "suppressed" if after_state == "suppress" else "stale"
+                if after_state == "suppress":
+                    updated["relation"] = "suppress"
+                edges[index] = updated
 
-    for index, edge in enumerate(edges):
-        last_used = edge.get("last_used")
-        if not last_used:
-            continue
-        try:
-            age_days = (now - parse_datetime(str(last_used))).days
-        except ValueError:
-            continue
-        if age_days < args.days_unused:
-            continue
-        before_weight = float(edge.get("weight", 0))
-        after_weight = round(max(0.0, before_weight - args.amount), 3)
-        after_state = decay_state_for_weight(after_weight)
-        change = {
-            "id": edge.get("id"),
-            "days_unused": age_days,
-            "before_weight": round(before_weight, 3),
-            "after_weight": after_weight,
-            "before_state": edge.get("decay_state"),
-            "after_state": after_state,
-        }
-        proposed_changes.append(change)
         if args.write:
-            updated = deepcopy(edge)
-            updated["weight"] = after_weight
-            updated["decay_state"] = after_state
-            updated["confidence"] = "suppressed" if after_state == "suppress" else "stale"
-            if after_state == "suppress":
-                updated["relation"] = "suppress"
-            edges[index] = updated
-
-    if args.write:
-        write_memory_graph(vault, edges)
+            write_memory_graph(vault, edges)
     print_json({"ok": True, "written": bool(args.write), "proposed_changes": proposed_changes})
     return 0
 
@@ -834,37 +895,37 @@ def command_ingest_momo_route(args: argparse.Namespace) -> int:
         print_json({"ok": False, "errors": capture_errors})
         return 1
 
-    edges = load_edges_for_route(vault)
-    edge = find_edge(edges, edge_id)
-    if edge is None:
-        edge = base_edge(
-            edge_id,
-            "momo-tools route result verification outcome",
-            "capture event -> memory edge update -> future route suggestion",
-            "evidence_chain",
-            "Translate verified route results into capture events before strengthening memory graph edges.",
+    with memory_graph_transaction(vault, args.write) as edges:
+        edge = find_edge(edges, edge_id)
+        if edge is None:
+            edge = base_edge(
+                edge_id,
+                "momo-tools route result verification outcome",
+                "capture event -> memory edge update -> future route suggestion",
+                "evidence_chain",
+                "Translate verified route results into capture events before strengthening memory graph edges.",
+                evidence,
+                weight=0.6,
+            )
+            edges.append(edge)
+        updated = apply_outcome(
+            edge,
+            outcome,
             evidence,
-            weight=0.6,
+            None if outcome == "success" else f"momo route status: {status}",
         )
-        edges.append(edge)
-    updated = apply_outcome(
-        edge,
-        outcome,
-        evidence,
-        None if outcome == "success" else f"momo route status: {status}",
-    )
-    edge_errors = validate_memory_edge_or_error(updated)
-    if edge_errors:
-        print_json({"ok": False, "errors": edge_errors})
-        return 1
-    for index, existing in enumerate(edges):
-        if existing.get("id") == edge_id:
-            edges[index] = updated
-            break
+        edge_errors = validate_memory_edge_or_error(updated)
+        if edge_errors:
+            print_json({"ok": False, "errors": edge_errors})
+            return 1
+        for index, existing in enumerate(edges):
+            if existing.get("id") == edge_id:
+                edges[index] = updated
+                break
 
-    if args.write:
-        write_jsonl_append(vault / "captures.jsonl", capture_event)
-        write_memory_graph(vault, edges)
+        if args.write:
+            write_jsonl_append(vault / "captures.jsonl", capture_event)
+            write_memory_graph(vault, edges)
     print_json(
         {
             "ok": True,
@@ -909,6 +970,222 @@ def command_route_suggest(args: argparse.Namespace) -> int:
     ]
     print_json({"query": args.query, "suggestions": suggestions})
     return 0 if suggestions else 2
+
+
+def load_json_object(path: Path) -> dict[str, Any]:
+    value = json.loads(path.expanduser().resolve().read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError(f"expected JSON object: {path}")
+    return value
+
+
+def load_retrieval_cases(path: Path) -> list[dict[str, Any]]:
+    value = json.loads(path.expanduser().resolve().read_text(encoding="utf-8"))
+    if isinstance(value, dict):
+        value = value.get("cases")
+    if not isinstance(value, list) or not all(isinstance(item, dict) for item in value):
+        raise ValueError(f"retrieval cases must be a JSON list or an object with cases[]: {path}")
+    return value
+
+
+def command_health(args: argparse.Namespace) -> int:
+    try:
+        current_day = date.fromisoformat(args.today) if args.today else None
+    except ValueError:
+        print_json({"ok": False, "errors": ["--today must use YYYY-MM-DD"]})
+        return 2
+    result = hardening.analyze_health(Path(args.vault), today=current_day)
+    print_json(result)
+    return 0 if result["state"] == "verified-working" else 1
+
+
+def command_capture_gate(args: argparse.Namespace) -> int:
+    result = hardening.evaluate_capture_gate(
+        Path(args.vault),
+        args.mode,
+        args.target,
+        args.delivery_complete,
+    )
+    print_json(result)
+    return int(result["exit_code"])
+
+
+def command_retrieval_benchmark(args: argparse.Namespace) -> int:
+    try:
+        cases = load_retrieval_cases(Path(args.cases))
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print_json({"ok": False, "errors": [str(exc)]})
+        return 2
+    result = hardening.run_retrieval_benchmark(Path(args.vault), cases)
+    print_json(result)
+    return 0 if result["case_count"] else 2
+
+
+def command_status_build(args: argparse.Namespace) -> int:
+    if args.valid_hours <= 0:
+        print_json({"ok": False, "errors": ["--valid-hours must be greater than zero"]})
+        return 2
+    try:
+        generated_at = parse_datetime(args.now) if args.now else datetime.now(timezone.utc)
+        cases_path = Path(args.cases) if args.cases else None
+        policy_path = Path(args.policy) if args.policy else None
+        fingerprint = hardening.input_fingerprint(
+            Path(args.vault),
+            cases=cases_path,
+            policy=policy_path,
+        )
+    except (OSError, ValueError) as exc:
+        print_json({"ok": False, "errors": [str(exc)]})
+        return 2
+    manifest = {
+        "schema": "second-brain-status-manifest/v1",
+        "state": args.state,
+        "generated_at": generated_at.isoformat(),
+        "valid_until": (generated_at + timedelta(hours=args.valid_hours)).isoformat(),
+        "input_fingerprint": fingerprint,
+    }
+    if args.write:
+        if not args.output:
+            print_json({"ok": False, "errors": ["--write requires --output"]})
+            return 2
+        hardening.write_json_atomic(Path(args.output), manifest)
+    print_json({"ok": True, "written": bool(args.write), "manifest": manifest})
+    return 0
+
+
+def command_status_watch(args: argparse.Namespace) -> int:
+    try:
+        manifest = load_json_object(Path(args.manifest))
+        fingerprint = hardening.input_fingerprint(
+            Path(args.vault),
+            cases=Path(args.cases) if args.cases else None,
+            policy=Path(args.policy) if args.policy else None,
+        )
+        current_time = parse_datetime(args.now) if args.now else None
+        result = hardening.inspect_status(manifest, fingerprint, now=current_time)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print_json({"ok": False, "errors": [str(exc)]})
+        return 2
+    print_json(result)
+    return 0 if result["state"] != "blocked" else 1
+
+
+def command_index_check(args: argparse.Namespace) -> int:
+    vault = Path(args.vault).expanduser().resolve()
+    stats = hardening.vault_stats(vault)
+    result = hardening.check_index_freshness(vault / args.index, stats)
+    result["marker"] = hardening.render_index_stats_marker(stats)
+    print_json(result)
+    return 0 if result["current"] else 1
+
+
+def command_privacy_scan(args: argparse.Namespace) -> int:
+    targets: list[Path] = []
+    missing: list[str] = []
+    for raw in args.target:
+        target = Path(raw).expanduser().resolve()
+        if target.is_file():
+            targets.append(target)
+        elif target.is_dir():
+            targets.extend(
+                path
+                for path in target.rglob("*")
+                if path.is_file()
+                and not hardening.IGNORED_PARTS.intersection(path.relative_to(target).parts)
+            )
+        else:
+            missing.append(raw)
+    if missing:
+        print_json({"ok": False, "errors": [f"target does not exist: {value}" for value in missing]})
+        return 2
+    result = hardening.scan_sensitive_content(dict.fromkeys(targets))
+    print_json(result)
+    return 0 if result["ok"] else 1
+
+
+def command_automation_ledger_check(args: argparse.Namespace) -> int:
+    result = hardening.validate_automation_ledger(
+        Path(args.ledger),
+        require_scheduled=args.require_scheduled,
+    )
+    print_json(result)
+    return 0 if result["ok"] else 1
+
+
+def parse_external_specs(values: list[str]) -> dict[str, Path]:
+    result: dict[str, Path] = {}
+    for value in values:
+        label, separator, raw_path = value.partition("=")
+        if not separator or not label or not raw_path:
+            raise ValueError(f"--external must use LABEL=PATH: {value}")
+        if label in result:
+            raise ValueError(f"duplicate external label: {label}")
+        result[label] = Path(raw_path)
+    return result
+
+
+def command_backup_create(args: argparse.Namespace) -> int:
+    try:
+        manifest = hardening.create_backup(
+            Path(args.vault),
+            Path(args.destination),
+            args.label,
+            external=parse_external_specs(args.external),
+        )
+    except (OSError, ValueError) as exc:
+        print_json({"ok": False, "errors": [str(exc)]})
+        return 2
+    print_json({"ok": True, "manifest": str(manifest)})
+    return 0
+
+
+def command_backup_verify(args: argparse.Namespace) -> int:
+    try:
+        result = hardening.verify_backup(Path(args.manifest), Path(args.workdir))
+    except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError, tarfile.TarError) as exc:
+        print_json({"ok": False, "errors": [str(exc)]})
+        return 2
+    print_json(result)
+    return 0 if result["ok"] else 1
+
+
+def command_retention_audit(args: argparse.Namespace) -> int:
+    try:
+        policy = load_json_object(Path(args.policy))
+        status_manifest = load_json_object(Path(args.status_manifest))
+        backup_times = [
+            _parse_manifest_time(path)
+            for path in sorted(Path(args.backup_dir).expanduser().resolve().glob("*.manifest.json"))
+        ]
+        backup_times = [value for value in backup_times if value is not None]
+        ledger_rows = [
+            json.loads(line)
+            for line in Path(args.ledger).expanduser().resolve().read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        if not all(isinstance(row, dict) for row in ledger_rows):
+            raise ValueError("automation ledger rows must be JSON objects")
+        current_time = parse_datetime(args.now) if args.now else None
+        result = hardening.audit_retention(
+            policy,
+            backup_times,
+            ledger_rows,
+            status_manifest,
+            now=current_time,
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print_json({"ok": False, "errors": [str(exc)]})
+        return 2
+    print_json(result)
+    return 0 if result["state"] == "verified-working" else 1
+
+
+def _parse_manifest_time(path: Path) -> datetime | None:
+    try:
+        value = load_json_object(path).get("created_at")
+        return parse_datetime(value) if isinstance(value, str) else None
+    except (OSError, ValueError, json.JSONDecodeError):
+        return None
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -991,6 +1268,86 @@ def build_parser() -> argparse.ArgumentParser:
     route_parser.add_argument("query", help="task description")
     route_parser.add_argument("--limit", type=int, default=3)
     route_parser.set_defaults(func=command_route_suggest)
+
+    health_parser = subparsers.add_parser("health", help="run read-only vault health and overdue-task checks")
+    health_parser.add_argument("vault", help="vault directory")
+    health_parser.add_argument("--today", help="YYYY-MM-DD override for deterministic checks")
+    health_parser.set_defaults(func=command_health)
+
+    gate_parser = subparsers.add_parser("capture-gate", help="fail-closed preflight for planned note writes")
+    gate_parser.add_argument("vault", help="vault directory")
+    gate_parser.add_argument("--mode", required=True, choices=sorted(hardening.MODE_BUDGETS))
+    gate_parser.add_argument("--target", action="append", default=[], help="relative Markdown target")
+    gate_parser.add_argument("--delivery-complete", action="store_true")
+    gate_parser.set_defaults(func=command_capture_gate)
+
+    retrieval_parser = subparsers.add_parser("retrieval-benchmark", help="run rank-aware Markdown retrieval cases")
+    retrieval_parser.add_argument("vault", help="vault directory")
+    retrieval_parser.add_argument("--cases", required=True, help="JSON case file")
+    retrieval_parser.set_defaults(func=command_retrieval_benchmark)
+
+    status_build_parser = subparsers.add_parser("status-build", help="build a content-aware status manifest")
+    status_build_parser.add_argument("vault", help="vault directory")
+    status_build_parser.add_argument(
+        "--state",
+        choices=["verified-working", "degraded", "blocked"],
+        default="verified-working",
+    )
+    status_build_parser.add_argument("--valid-hours", type=float, default=24)
+    status_build_parser.add_argument("--cases")
+    status_build_parser.add_argument("--policy")
+    status_build_parser.add_argument("--now", help="ISO date-time override")
+    status_build_parser.add_argument("--output")
+    status_build_parser.add_argument("--write", action="store_true")
+    status_build_parser.set_defaults(func=command_status_build)
+
+    status_watch_parser = subparsers.add_parser("status-watch", help="block expired or content-stale status")
+    status_watch_parser.add_argument("manifest", help="status manifest JSON")
+    status_watch_parser.add_argument("vault", help="vault directory")
+    status_watch_parser.add_argument("--cases")
+    status_watch_parser.add_argument("--policy")
+    status_watch_parser.add_argument("--now", help="ISO date-time override")
+    status_watch_parser.set_defaults(func=command_status_watch)
+
+    index_parser = subparsers.add_parser("index-check", help="compare index stats marker with current vault stats")
+    index_parser.add_argument("vault", help="vault directory")
+    index_parser.add_argument("--index", default="index.md", help="relative index path")
+    index_parser.set_defaults(func=command_index_check)
+
+    privacy_parser = subparsers.add_parser("privacy-scan", help="scan file contents for high-confidence secrets")
+    privacy_parser.add_argument("target", nargs="+", help="file or directory to scan")
+    privacy_parser.set_defaults(func=command_privacy_scan)
+
+    ledger_parser = subparsers.add_parser(
+        "automation-ledger-check",
+        help="validate manual versus scheduled run evidence",
+    )
+    ledger_parser.add_argument("ledger", help="automation JSONL ledger")
+    ledger_parser.add_argument("--require-scheduled", action="store_true")
+    ledger_parser.set_defaults(func=command_automation_ledger_check)
+
+    backup_create_parser = subparsers.add_parser("backup-create", help="create a hashed vault snapshot")
+    backup_create_parser.add_argument("vault", help="vault directory")
+    backup_create_parser.add_argument("destination", help="backup output directory")
+    backup_create_parser.add_argument("--label", required=True)
+    backup_create_parser.add_argument("--external", action="append", default=[], help="approved LABEL=PATH state")
+    backup_create_parser.set_defaults(func=command_backup_create)
+
+    backup_verify_parser = subparsers.add_parser("backup-verify", help="verify a backup through isolated restore")
+    backup_verify_parser.add_argument("manifest", help="backup manifest JSON")
+    backup_verify_parser.add_argument("workdir", help="empty isolated restore directory")
+    backup_verify_parser.set_defaults(func=command_backup_verify)
+
+    retention_parser = subparsers.add_parser(
+        "retention-audit",
+        help="audit backup, status, and scheduled-run freshness",
+    )
+    retention_parser.add_argument("--policy", required=True)
+    retention_parser.add_argument("--backup-dir", required=True)
+    retention_parser.add_argument("--ledger", required=True)
+    retention_parser.add_argument("--status-manifest", required=True)
+    retention_parser.add_argument("--now", help="ISO date-time override")
+    retention_parser.set_defaults(func=command_retention_audit)
 
     return parser
 

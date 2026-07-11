@@ -44,12 +44,17 @@ Status: implemented locally.
 ## v0.5 - Router Feedback Loop
 
 Goal: close the loop with external capability routers.
-Status: first local loop implemented.
+Status: implemented in the public package with operational hardening.
 
 - Ingest `momo-tools` route results.
 - Convert verified outcomes into capture events.
 - Promote repeated successes into `preferred_tool_for` edges.
 - Promote repeated failures into `avoid_if` or `suppress` edges.
+- Hold a process lock across memory-graph load, mutation, validation, and save.
+- Add read-only health checks with exact overdue task anchors.
+- Add fail-closed capture budgets and content-aware status fingerprints.
+- Add rank-aware retrieval, compact-index freshness, privacy, backup/restore,
+  automation-ledger, and retention verification primitives.
 
 ## Non-Goals
 
