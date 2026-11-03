@@ -2,6 +2,10 @@
 
 Adaptive route memory for AI agents.
 
+**使用指南（2026-11-03）：[最新版 Second Brain 用法・繁體中文](docs/usage-zh-TW.md)**
+
+Current operating policy: complete the requested work, then persist memory only on an explicit save request or within an already authorized maintenance workflow. Useful results, corrections, and failed routes alone do not authorize capture or rule promotion. The guide distinguishes this public reference CLI from a fully configured personal vault.
+
 Codex Second Brain OS is a public-safe reference package for agent memory workflows. It turns Markdown, Obsidian-style vaults, command files, local evidence, and workflow history into a small operating layer for AI agents.
 
 It is not a note-taking template. It helps an agent decide what to read, which capability to use, what proof is required, and which failed route should be weakened next time.
@@ -71,7 +75,7 @@ python3 -m codex_second_brain.cli capture \
   --evidence "demo-vault/fixtures/memory-graph.jsonl"
 ```
 
-Add `--write` only when you intentionally want to append to `captures.jsonl`.
+Add `--write` only when explicitly authorized to append to `captures.jsonl`.
 
 ## Adaptive Memory Operations
 
@@ -104,8 +108,9 @@ load startup context
   -> run capability preflight
   -> deliver user-visible result
   -> verify evidence
-  -> capture durable signal
-  -> reinforce or weaken route memory
+  -> stop unless saving or maintenance is authorized
+  -> capture the smallest authorized durable signal
+  -> update route memory only within that authorization
   -> consolidate with dry-run reports
 ```
 
@@ -215,8 +220,9 @@ user task
   -> momo-tools route / gate / verify
   -> agent executes bounded task
   -> deliver result
-  -> Codex Second Brain captures durable signal
-  -> memory graph strengthens or weakens route
+  -> explicit save / authorized maintenance gate
+  -> Codex Second Brain captures the authorized durable signal
+  -> memory graph changes only within the authorized scope
   -> future routing gets better context
 ```
 

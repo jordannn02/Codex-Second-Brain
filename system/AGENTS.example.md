@@ -36,8 +36,9 @@ The user-visible result comes first.
 
 ```text
 deliver answer / file / query result / report / artifact
-  -> then capture durable memory
-  -> then update graph edges
+  -> stop unless saving or maintenance is authorized
+  -> then capture only the authorized durable memory
+  -> update graph edges only if covered by that authorization
   -> then leave broad cleanup to consolidation
 ```
 
@@ -60,7 +61,9 @@ State which layer supports the conclusion.
 
 ## Capture Routing
 
-Save only durable signals:
+Require an explicit save request or an existing authorized maintenance scope before persisting anything. Ordinary saves use at most one durable target; do not also propagate to indexes, boards, logs, or graph edges. Use a configured capture gate, required schema validation, and exact readback. A successful gate is not user authorization.
+
+After authorization, select durable signals:
 
 - routes that worked;
 - routes that failed;
@@ -74,7 +77,7 @@ Do not save trivial chat, secrets, raw private screenshots, private financial re
 
 ## Memory Graph
 
-When a route succeeds, strengthen it. When a route fails, weaken it or add an `avoid_if` / `suppress` edge. Keep evidence paths so future agents can audit why the route changed.
+Read graph guidance before repeating a known route, but verify current evidence. Graph writes require explicit learning authorization or an existing authorized maintenance scope. Within that scope, a verified success may strengthen a route; a verified failure may weaken it or add an `avoid_if` / `suppress` edge. Keep evidence paths so future agents can audit why the route changed.
 
 ## Dry-Run-First Maintenance
 

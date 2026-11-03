@@ -7,7 +7,8 @@ user task
   -> momo-tools route / gate / verify
   -> agent executes bounded task
   -> user-visible delivery
-  -> Codex Second Brain captures durable signal
+  -> explicit save / authorized maintenance gate
+  -> Codex Second Brain captures only the authorized durable signal
   -> memory graph strengthens or weakens route
   -> future routing starts smarter
 ```
@@ -49,7 +50,7 @@ python3 -m codex_second_brain.cli ingest-momo-route \
   demo-vault/fixtures/momo-route-result.json
 ```
 
-Add `--write` to append a capture event to `captures.jsonl` and update `memory-graph.jsonl`.
+Only when both writes are authorized, add `--write` to append a capture event to `captures.jsonl` and update `memory-graph.jsonl`. An ordinary one-note save does not authorize this two-file operation. Tool-routing results and successful execution alone are not permission to persist learning.
 
 The ingestion loop is:
 
