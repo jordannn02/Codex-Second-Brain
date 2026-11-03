@@ -37,4 +37,4 @@ This public-safe demo index maps the synthetic vault. Use it to demonstrate how 
 - [[Dev Logs/2026-07-08 - Demo Adaptive Routing Cases]] - Implementation log for demo scenarios.
 - [[Logs/2026-07-08]] - Operation log.
 
-<!-- second-brain-stats: {"corpus_sha256":"3e98913ec66deab58b15515cf929eee4259b45e6f7c2a88a182df8e01b71413f","dev_logs":1,"markdown_files":10} -->
+<!-- second-brain-stats: {"corpus_sha256":"77f724a9aa2bff0058805791b2ba8247053856882bf7229fb2d1ffb5357352a3","dev_logs":1,"markdown_files":10} -->
