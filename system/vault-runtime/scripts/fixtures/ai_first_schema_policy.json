@@ -1,0 +1,16 @@
+{
+  "schema": "ai-first-schema-policy/v1",
+  "canonical_preamble": "## For future Claude",
+  "preamble_aliases": [
+    "## future Claude",
+    "## For Future Claude",
+    "## Future Claude"
+  ],
+  "required_fields": ["date", "type", "tags", "ai-first"],
+  "type_aliases": {
+    "dev-log": "devlog",
+    "operation-log": "log",
+    "operation-log-pointer": "log"
+  },
+  "exempt_paths": ["_CLAUDE.md", "Home.md"]
+}

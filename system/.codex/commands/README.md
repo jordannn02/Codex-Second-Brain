@@ -1,6 +1,6 @@
 # Command Catalog Pattern
 
-This folder is a public placeholder for command-driven second-brain workflows. It does not include private command bodies from a real vault.
+This legacy catalog describes the reference CLI. The full public-safe set of 41 command templates now ships in `system/vault-runtime/commands/`; install it with `bin/install-vault-runtime.py` as described in `docs/installation.md`. Templates are adapted workflows, not private vault notes or credentials.
 
 ## Recommended Commands
 
@@ -24,4 +24,4 @@ Commands should:
 
 ## Public Boundary
 
-Do not publish private `.codex/commands/` files from a real vault. Instead, publish command patterns, redacted examples, or synthetic fixtures.
+Publish reviewed, public-safe command templates and synthetic fixtures only. Do not publish private notes, account details or machine-specific command bodies.

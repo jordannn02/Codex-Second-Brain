@@ -22,8 +22,9 @@ from typing import Any, Iterable, Mapping, Sequence
 
 BACKUP_SCHEMA = "codex-second-brain-backup/v1"
 MODE_BUDGETS = {
-    "AUTO_CAPTURE": 1,
-    "EXPLICIT_COMMAND": 5,
+    "AUTO_CAPTURE": 0,
+    "EXPLICIT_COMMAND": 1,
+    "EXPLICIT_MAINTENANCE": 5,
     "WEEKLY_CONSOLIDATION": 250,
 }
 IGNORED_PARTS = {
@@ -209,8 +210,8 @@ def evaluate_capture_gate(
 
     if not targets:
         usage_errors.append("at least one target is required")
-    if mode == "AUTO_CAPTURE" and not delivery_complete:
-        policy_errors.append("AUTO_CAPTURE requires a completed user-visible delivery")
+    if mode == "AUTO_CAPTURE":
+        policy_errors.append("AUTO_CAPTURE is disabled; delivery or useful results do not authorize saving")
     budget = MODE_BUDGETS.get(mode)
     if budget is not None and len(normalized) > budget:
         policy_errors.append(f"target budget exceeded: {len(normalized)} > {budget}")
@@ -223,6 +224,7 @@ def evaluate_capture_gate(
         "exit_code": exit_code,
         "mode": mode,
         "target_budget": budget,
+        "authorization_boundary": "Validation is not authorization. Explicit save or existing authorized maintenance scope is required.",
         "targets": normalized,
         "errors": errors,
     }
@@ -701,6 +703,28 @@ def verify_backup(manifest_path: Path, workdir: Path) -> dict[str, Any]:
         return {"ok": False, "mismatches": mismatches, "restored_file_count": 0}
     if workdir.exists() and any(workdir.iterdir()):
         raise ValueError(f"restore workdir must be empty: {workdir}")
+    expected_paths: set[str] = set()
+    for row in manifest["files"]:
+        if not isinstance(row, Mapping) or not isinstance(row.get("archive_path"), str):
+            raise ValueError("invalid-file-record")
+        name = row["archive_path"]
+        path = Path(name)
+        if path.is_absolute() or ".." in path.parts or not name or path.as_posix() != name or name in expected_paths:
+            raise ValueError(f"unsafe-or-duplicate-manifest-path:{name}")
+        expected_paths.add(name)
+    archive_paths: set[str] = set()
+    with tarfile.open(archive, "r:gz") as tar:
+        for member in tar.getmembers():
+            path = Path(member.name)
+            if path.is_absolute() or ".." in path.parts or path.as_posix() != member.name:
+                raise ValueError(f"unsafe-archive-path:{member.name}")
+            if not member.isfile():
+                raise ValueError(f"unsupported-archive-member:{member.name}")
+            if member.name in archive_paths:
+                raise ValueError(f"duplicate-archive-path:{member.name}")
+            archive_paths.add(member.name)
+    if archive_paths != expected_paths:
+        raise ValueError("archive-manifest-file-set-mismatch")
     _safe_extract(archive, workdir)
     for row in manifest["files"]:
         if not isinstance(row, Mapping) or "archive_path" not in row:

@@ -1,3 +1,10 @@
+# 0.6.0 — 2026-11-03
+
+- Ship public-safe daily workflow runtime, 41 command templates, portable installer and layered capability guide.
+- Add CJK graph preflight/guards/shadow evaluation, schema-delta capture gate and optional search backend.
+- Reject automatic capture; separate one-target saves from bounded explicit maintenance.
+- Require Python 3.12+ for the shared runtime; private data, credentials and model state remain excluded.
+
 # Changelog
 
 ## 0.5.0 - 2026-07-11

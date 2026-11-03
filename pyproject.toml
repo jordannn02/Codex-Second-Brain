@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "codex-second-brain"
-version = "0.5.0"
+version = "0.6.0"
 description = "Adaptive route memory and dry-run-first second-brain workflows for AI agents."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = ["jsonschema>=4.22"]
 license = { file = "LICENSE" }
 authors = [
@@ -21,6 +21,9 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Libraries :: Python Modules"
 ]
+
+[project.optional-dependencies]
+runtime = ["PyYAML>=6.0"]
 
 [project.scripts]
 second-brain = "codex_second_brain.cli:main"

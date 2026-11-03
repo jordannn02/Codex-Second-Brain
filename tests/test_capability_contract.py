@@ -34,7 +34,10 @@ class CapabilityContractTests(unittest.TestCase):
             for capability, matrix in contract["capabilities"].items()
         }
         self.assertTrue(states)
-        self.assertEqual(set(states.values()), {"verified-working"})
+        self.assertTrue(set(states.values()) <= {"verified-working", "visible", "reference-only", "not-shipped"})
+        self.assertEqual(states["optional-qwen-search"], "visible")
+        self.assertEqual(states["command-templates"], "visible")
+        self.assertEqual(states["fail-closed-capture"], "verified-working")
 
 
 if __name__ == "__main__":

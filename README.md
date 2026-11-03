@@ -27,6 +27,18 @@ Most "AI + notes" systems store information. Codex Second Brain OS changes agent
 | Contradiction handling | Conflicting notes become review targets instead of silent confusion. |
 | Dry-run-first automation | Maintenance reports before it writes, deletes, archives, or merges. |
 
+## Portable daily-workflow runtime (0.6)
+
+[繁體中文分層功能圖與差異](docs/functional-layers-zh-TW.md) · [安裝與啟用](docs/installation.md) · [Vault Runtime](docs/vault-runtime.md) · [完整 Memory Graph](docs/memory-graph-portable.md)
+
+Version 0.6 ships the public-safe daily workflow runtime in addition to the reference CLI: 41 command templates, schema-aware capture planning and post-write verification, CJK graph preflight and failure guards, isolated shadow evaluation, lexical search with an optional local Qwen backend, and health/backup/maintenance tools. Install the runtime from a repository checkout with `bin/install-vault-runtime.py`; `pip install` alone installs the reference CLI, not the full vault integration. Python 3.12+ and macOS/Linux are the common runtime baseline.
+
+Ordinary saves use `EXPLICIT_COMMAND` (one target); explicitly requested multi-file maintenance uses `EXPLICIT_MAINTENANCE` (at most five). `AUTO_CAPTURE` is rejected, even after delivery. Existing authorized weekly workflows retain their separate scope. A valid manifest is not permission.
+
+Private notes, real graph edges, indexes, shadow databases, credentials, accounts, connector settings, model weights and automation state are excluded. Command templates are agent instructions, not evidence that every external workflow has been deployed or verified.
+
+![Second Brain functional layers](assets/functional-layers-zh-TW.svg)
+
 ## Current Status
 
 This repository is an alpha reference implementation. It includes:

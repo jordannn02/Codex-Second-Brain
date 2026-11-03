@@ -17,13 +17,7 @@ The public reference implementation is dry-run-first. It reports candidates befo
 
 ## Trigger Model
 
-Consolidation can be triggered by:
-
-- scheduled weekly automation;
-- explicit command;
-- post-delivery maintenance step;
-- health-check report;
-- repeated graph failures that suggest a route needs review.
+Consolidation runs only on an explicit request or an existing authorized scheduled workflow, within its saved scope. Health reports and repeated failures may be review candidates; they do not authorize maintenance, persistence, or rule promotion. A post-delivery step is not an automatic trigger.
 
 ## Safe Dry-Run Actions
 

@@ -18,7 +18,7 @@ These are operating constraints, not a substitute for user approval around delet
 ```bash
 second-brain health demo-vault --today 2026-07-11
 second-brain capture-gate demo-vault \
-  --mode AUTO_CAPTURE \
+  --mode EXPLICIT_COMMAND \
   --target "Knowledge/Synthetic capture.md" \
   --delivery-complete
 second-brain retrieval-benchmark demo-vault \

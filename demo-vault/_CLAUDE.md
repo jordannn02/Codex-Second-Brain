@@ -28,7 +28,9 @@ Deliver the user-visible result before saving memory.
 
 ## Capture Rules
 
-Capture only durable signals:
+Save only on an explicit user request or within an existing authorized maintenance workflow. Ordinary saves use one durable target. Delivery, success, failure, corrections, or useful insights alone do not authorize capture. Never automatically update graph edges, indexes, or rules.
+
+After authorization, select durable signals:
 
 - route worked;
 - route failed;

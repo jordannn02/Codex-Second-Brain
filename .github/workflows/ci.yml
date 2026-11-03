@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.12", "3.13", "3.14"]
 
     steps:
       - name: Checkout
@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install package
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[runtime]"
 
       - name: Validate demo vault
         run: second-brain validate demo-vault
@@ -37,7 +37,7 @@ jobs:
       - name: Operational hardening smoke tests
         run: |
           second-brain health demo-vault --today 2026-07-11
-          second-brain capture-gate demo-vault --mode AUTO_CAPTURE --target "Knowledge/Synthetic capture.md" --delivery-complete
+          second-brain capture-gate demo-vault --mode EXPLICIT_COMMAND --target "Knowledge/Synthetic capture.md" --delivery-complete
           second-brain retrieval-benchmark demo-vault --cases demo-vault/fixtures/retrieval-cases.json
           second-brain index-check demo-vault
           second-brain privacy-scan codex_second_brain demo-vault

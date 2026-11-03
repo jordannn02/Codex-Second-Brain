@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import io
+import tarfile
 import tempfile
 import unittest
 from datetime import date, datetime, timezone
@@ -80,6 +83,15 @@ class HardeningTests(unittest.TestCase):
         self.assertEqual(denied["exit_code"], 1)
         self.assertFalse(too_many["allowed"])
         self.assertIn("target budget", " ".join(too_many["errors"]))
+
+    def test_capture_policy_distinguishes_save_and_maintenance(self) -> None:
+        tmp, vault = self.make_vault()
+        self.addCleanup(tmp.cleanup)
+        self.assertFalse(evaluate_capture_gate(vault, "AUTO_CAPTURE", ["Notes/a.md"], True)["allowed"])
+        self.assertTrue(evaluate_capture_gate(vault, "EXPLICIT_COMMAND", ["Notes/a.md"], False)["allowed"])
+        self.assertFalse(evaluate_capture_gate(vault, "EXPLICIT_COMMAND", ["Notes/a.md", "Notes/b.md"], True)["allowed"])
+        self.assertTrue(evaluate_capture_gate(vault, "EXPLICIT_MAINTENANCE", [f"Notes/{n}.md" for n in range(5)], False)["allowed"])
+        self.assertFalse(evaluate_capture_gate(vault, "EXPLICIT_MAINTENANCE", [f"Notes/{n}.md" for n in range(6)], True)["allowed"])
 
     def test_capture_gate_rejects_invalid_target_as_usage_error(self) -> None:
         tmp, vault = self.make_vault()
@@ -288,6 +300,23 @@ class HardeningTests(unittest.TestCase):
         manifest_path = create_backup(vault, Path(tmp.name) / "backups", "safe")
         with self.assertRaisesRegex(ValueError, "outside the source vault"):
             verify_backup(manifest_path, vault / "restore")
+
+    def test_restore_rejects_extra_and_duplicate_archive_members_before_extract(self) -> None:
+        tmp, vault = self.make_vault()
+        self.addCleanup(tmp.cleanup)
+        root = Path(tmp.name)
+        for names, declared in [(['vault/extra.md'], []), (['vault/a.md', 'vault/a.md'], ['vault/a.md']), (['../escape.md'], ['../escape.md'])]:
+            archive = root/'crafted.tar.gz'
+            with tarfile.open(archive, 'w:gz') as tar:
+                for name in names:
+                    info = tarfile.TarInfo(name); info.size = 1
+                    tar.addfile(info, io.BytesIO(b'x'))
+            manifest = root/'crafted.json'
+            from codex_second_brain.hardening import BACKUP_SCHEMA
+            manifest.write_text(json.dumps({'schema': BACKUP_SCHEMA, 'archive': archive.name, 'archive_sha256': hashlib.sha256(archive.read_bytes()).hexdigest(), 'source_vault': str(vault), 'files': [{'archive_path': name, 'sha256': hashlib.sha256(b'x').hexdigest()} for name in declared]}))
+            destination = root/'restore-malicious'
+            with self.assertRaises(ValueError): verify_backup(manifest, destination)
+            self.assertFalse(destination.exists())
 
     def test_retention_audit_keeps_scheduled_evidence_separate(self) -> None:
         policy = {

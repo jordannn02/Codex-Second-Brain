@@ -179,11 +179,11 @@ def command_init(args: argparse.Namespace) -> int:
     files = {
         "_CLAUDE.md": markdown_stub(
             "Agent Operating Manual",
-            "Startup context, routing rules, delivery-first behavior, evidence boundaries, and safety rules for this vault.",
+            "Read the smallest relevant context and verify evidence before delivering results. Save only on an explicit user request or within an existing authorized maintenance workflow. Ordinary saves use one durable target; explicit multi-file maintenance uses at most five per manifest. Success, failure, corrections, and useful insights do not authorize persistence. Validate and read back authorized changes; do not automatically propagate or promote rules.",
         ),
         "index.md": markdown_stub(
             "Index",
-            "Navigation layer for future agents. Keep it small and update it when durable notes are added.",
+            "Navigation layer for future agents. Keep it small; update only within explicit indexing or maintenance authorization.",
         ),
         "Home.md": markdown_stub(
             "Home",

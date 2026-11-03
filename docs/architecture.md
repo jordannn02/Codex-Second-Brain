@@ -10,7 +10,8 @@ user task
   -> capability preflight
   -> bounded execution
   -> evidence verification
-  -> capture event
+  -> explicit save or existing maintenance authorization
+  -> bounded capture event
   -> memory graph update
   -> weekly consolidation
 ```
@@ -49,7 +50,7 @@ Successful routes gain weight. Failed routes gain failure signatures and may be 
 
 Consolidation should be report-first:
 
-1. Refresh indexes.
+1. Propose index refreshes; write only within authorized maintenance.
 2. Detect stale or orphaned items.
 3. Review low-confidence graph edges.
 4. Identify duplicates or cleanup candidates.

@@ -15,7 +15,7 @@
 | 維護知識庫 | 「檢查健康狀態，先列出問題」或 `/obsidian-health` | 先報告，修正與破壞性處理依實際授權範圍執行。 |
 | 了解目前狀態 | `/obsidian-world`、`/obsidian-projects`、`/obsidian-recap` | 依已安裝的命令檔讀取上下文，不保證所有服務已連接。 |
 
-這些 slash commands 是完整 vault 的 agent 指令路由，不是公開 CLI 子命令。必須先有相應 `.codex/commands/<name>.md` 與所需工具；只 clone 本倉庫不會安裝完整個人環境。舊命令若描述自動寫入、PINNED、Daily 或 backlinks，仍須遵守目前的明確授權與最小寫入規則。
+這些 slash commands 是 agent 指令路由，不是公開 CLI 子命令。0.6 已提供 41 份公開命令模板；依 [安裝說明](installation.md) 將 runtime 部署到指定 vault，並自行配置必要工具。只 clone 不會自動部署、登入服務或安裝模型。舊命令若描述自動寫入、PINNED、Daily 或 backlinks，仍須遵守目前的明確授權與最小寫入規則。
 
 ## 平常怎麼運作
 
@@ -36,11 +36,11 @@
 - 一般對話不自動保存。完成工作、有用洞見、使用者糾正、失敗或成功都不是寫入授權。
 - 「存一下」保存當前工作，最多一個長期目標；不順便更新索引、Daily、看板、日誌、backlinks 或 Memory Graph。
 - 「下次要記得」才是可重用規則保存；一般規則筆記不等於修改全域 `AGENTS.md`、技能或 vault 規則。
-- 明確的多檔維護可涵蓋有界目標；完整個人 vault 每份 Capture Gate manifest 最多五個目標。不用週維護模式繞過一般保存限制。
+- 明確的多檔維護可涵蓋有界目標；完整個人 vault 使用 `EXPLICIT_MAINTENANCE`，每份 Capture Gate manifest 最多五個目標。不用週維護模式繞過一般保存限制。
 - 已授權排程在其保存範圍內持續運作；不必每次重新要求相同授權，也不能據此擴張到刪除、封存、合併或覆寫證據。
 - 敏感與生產資料需有相應授權；密碼、token、私鑰等秘密永不寫入。
 
-完整個人 vault 若安裝 `.codex/scripts/capture_gate.py`，先列出相對 Markdown 目標，以 `EXPLICIT_COMMAND` 或符合授權的 `WEEKLY_CONSOLIDATION` 做 dry-run。只有 `allowed: true` 才能寫入 `manifest.proposed_changes`，接著執行 manifest 要求的 schema validation 並讀回原目標。Gate 驗證目標，不會替使用者授權。公開版的 JSONL capture 與個人 vault 的 Markdown Capture Gate 是不同介面。
+完整個人 vault 若安裝 `.codex/scripts/capture_gate.py`，先列出相對 Markdown 目標，以一般保存 `EXPLICIT_COMMAND`、明確多檔維護 `EXPLICIT_MAINTENANCE` 或符合授權的 `WEEKLY_CONSOLIDATION` 做 dry-run。只有 `allowed: true` 才能寫入 `manifest.proposed_changes`，接著執行 manifest 要求的 schema validation 並讀回原目標。Gate 驗證目標，不會替使用者授權。公開版的 JSONL capture 與個人 vault 的 Markdown Capture Gate 是不同介面。
 
 新增長期筆記遵守 vault 的 AI-first 格式：`type`、`date`、`tags`、`ai-first: true`，`## For future Claude`、相關 wikilinks、來源、日期與必要的信心標記。既有筆記只做必要更新，避免為了格式整理重寫歷史。
 
@@ -102,7 +102,7 @@ python3 -m codex_second_brain.cli capture \
 
 ## 維護與驗證範圍
 
-本次更新是操作文件對齊，不宣稱重新驗收完整個人環境。健康檢查、檢索評估、schema、graph、快照與還原應分別保留證據；歷史成功不保證現在仍有效。排程設定、實際執行與結果讀回也應分開報告。
+0.6 已補入公開 runtime 與合成測試，詳見 [功能分層與差異](functional-layers-zh-TW.md)。不宣稱重新驗收完整個人環境或所有外部服務。健康檢查、檢索評估、schema、graph、快照與還原應分別保留證據；歷史成功不保證現在仍有效。排程設定、實際執行與結果讀回也應分開報告。
 
 公開發布只包含方法、文件、schema 與合成示例。不要把私人 vault 根目錄直接當發布來源。只從 public-safe package 或其獨立 checkout 提交明確檔案。
 
